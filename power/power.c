@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 The CyanogenMod Project <http://www.cyanogenmod.org>
+ *           (C) 2017 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -157,7 +158,7 @@ static void set_power_profile(int profile) {
 
 static void boost(long boost_time) {
 #ifdef USE_PEGASUSQ_BOOSTING
-    if (is_vsync_active) return;
+    if (is_vsync_active || !check_governor()) return;
     if (boost_time == -1) {
         sysfs_write_int(PEGASUSQ_PATH "boost_lock_time", -1);
     } else {
@@ -168,7 +169,7 @@ static void boost(long boost_time) {
 
 static void end_boost() {
 #ifdef USE_PEGASUSQ_BOOSTING
-    if (is_vsync_active) return;
+    if (is_vsync_active || !check_governor()) return;
     sysfs_write_int(PEGASUSQ_PATH "boost_lock_time", 0);
 #endif
 }
@@ -323,6 +324,8 @@ static void power_set_interactive(__attribute__((unused)) struct power_module *m
  *     integer value of the boost duration in microseconds.
  */
 static void power_hint(__attribute__((unused)) struct power_module *module, power_hint_t hint, void *data) {
+    int32_t val;
+
     if (hint == POWER_HINT_SET_PROFILE) {
         ALOGV("%s: set profile %d", __func__, *(int32_t *)data);
         pthread_mutex_lock(&lock);
@@ -340,9 +343,17 @@ static void power_hint(__attribute__((unused)) struct power_module *module, powe
 
     switch (hint) {
         case POWER_HINT_INTERACTION:
-        case POWER_HINT_LAUNCH_BOOST:
-            ALOGV("%s: interaction/launch", __func__);
-            boost(profiles[current_power_profile].interaction_boost_time);
+            ALOGV("%s: interaction", __func__);
+            val = *(int32_t *)data;
+            if (val != 0) {
+                boost(val * US_TO_NS);
+            } else {
+                boost(profiles[current_power_profile].interaction_boost_time);
+            }
+            break;
+        case POWER_HINT_LAUNCH:
+            ALOGV("%s: launch", __func__);
+            boost(profiles[current_power_profile].launch_boost_time);
             break;
 /*       case POWER_HINT_VSYNC:
             if (*(int32_t *)data) {
