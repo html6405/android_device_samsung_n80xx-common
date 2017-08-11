@@ -18,7 +18,9 @@
 # by BoardConfigVendor.mk
 -include device/samsung/smdk4412-common/BoardCommonConfig.mk
 
-TARGET_SPECIFIC_HEADER_PATH := device/samsung/n80xx-common/include
+TARGET_SPECIFIC_HEADER_PATH += device/samsung/n80xx-common/include
+
+WITH_SU := true
 
 # Exynos4x12 Tablet
 BOARD_GLOBAL_CFLAGS += -DEXYNOS4X12_TABLET
