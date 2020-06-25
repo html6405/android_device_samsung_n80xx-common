@@ -23,7 +23,7 @@
 #include <hardware/power.h>
 #include <hardware/hardware.h>
 
-//various funcs we'll need to call, in their mangled form
+//various funcs we'll need to call, in their mangled form...
 
 //android::String8::String8(char const*)
 extern void _ZN7android7String8C1EPKc(void **str8P, const char *str);

@@ -18,17 +18,37 @@
 # by BoardConfigVendor.mk
 -include device/samsung/smdk4412-common/BoardCommonConfig.mk
 
+WITHOUT_UPDATE := false
+
+# Kernel
+TARGET_KERNEL_SOURCE := kernel/samsung/n80xx
+TARGET_KERNEL_CONFIG := lineageos_$(TARGET_DEVICE)_defconfig
+
+# Wifi
+WIFI_DRIVER_MODULE_PATH :=
+
+ifeq ($(TARGET_PRODUCT),lineage_n8000)
+# Headers
 TARGET_SPECIFIC_HEADER_PATH += device/samsung/n80xx-common/include
+endif
 
-WITH_SU := true
+ifeq ($(TARGET_PRODUCT),lineage_n8000_deodexed)
+# Headers
+TARGET_SPECIFIC_HEADER_PATH += device/samsung/n80xx-common/include
+endif
 
-# Exynos4x12 Tablet
-BOARD_GLOBAL_CFLAGS += -DEXYNOS4X12_TABLET
+ifeq ($(TARGET_PRODUCT),lineage_n8010)
+# Headers
+TARGET_SPECIFIC_HEADER_PATH += device/samsung/n80xx-common/include
+endif
 
+#Bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/samsung/n80xx-common/bluetooth
+
+# Bionic
+MALLOC_SVELTE := true
 TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
-
-# Camera
-BOARD_USES_PROPRIETARY_LIBCAMERA := true
+LIBART_IMG_BASE := 0x30000000
 
 # RIL
 BOARD_PROVIDES_LIBRIL := true
@@ -36,28 +56,56 @@ BOARD_MODEM_TYPE := xmm6262
 BOARD_GLOBAL_CFLAGS += -DDISABLE_ASHMEM_TRACKING
 BOARD_RIL_CLASS := ../../../device/samsung/n80xx-common/ril
 
+# Graphics
+TARGET_REQUIRES_SYNCHRONOUS_SETSURFACE := true
+
+ifdef EXYNOS4X12_ENHANCEMENTS
+BOARD_GLOBAL_CFLAGS += -DDISABLE_HW_ID_MATCH_CHECK
+endif
+
+# Camera
+BOARD_USES_PROPRIETARY_LIBCAMERA := true
+BOARD_USES_PROPRIETARY_LIBFIMC := false
+BOARD_CAMERA_HAVE_ISO := true
+BOARD_GLOBAL_CFLAGS += -DHAVE_ISO
+BOARD_GLOBAL_CFLAGS += -DSAMSUNG_CAMERA_HARDWARE
+BOARD_GLOBAL_CFLAGS += -DSAMSUNG_DVFS
+BOARD_GLOBAL_CFLAGS += -DCAMERA_WITH_CITYID_PARAM
+BOARD_CAMERA_MSG_MGMT := true
+
+#HWC
+BOARD_USE_SYSFS_VSYNC_NOTIFICATION := false
+
 # Filesystem
-BOARD_NAND_PAGE_SIZE := 4096
-BOARD_NAND_SPARE_SIZE := 128
-BOARD_BOOTIMAGE_PARTITION_SIZE := 8388608
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 8388608
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1444888576
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 12620578816
 BOARD_CACHEIMAGE_PARTITION_SIZE := 825638912
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := f2fs
 BOARD_FLASH_BLOCK_SIZE := 2048
-TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_RECOVERY_DEVICE_DIRS += device/samsung/n80xx
+TARGET_RECOVERY_DEVICE_DIRS += device/samsung/n80xx-common
+
+# Enable dex-preoptimization to speed up first boot sequence
+ifeq ($(HOST_OS),linux)
+  WITH_DEXPREOPT := true
+endif
 
 # Recovery
-# inherit from the proprietary version
--include vendor/samsung/n80xx-common/BoardConfigVendor.mk
+TARGET_RECOVERY_FSTAB := device/samsung/n80xx-common/rootdir/fstab.n80xx
+TARGET_RECOVERY_DENSITY := mdpi
+TARGET_USERIMAGES_USE_F2FS := true
+RECOVERY_FSTAB_VERSION := 2
 
-
-# SELinux
-BOARD_SEPOLICY_DIRS += device/samsung/n80xx-common/selinux
+# HDMIE
+#BOARD_USES_HDMI := true
+#BOARD_HDMI_STD := true
+#BOARD_HDMI_DDC_CH := DDC_CH_I2C_5
 
 # PowerHAL
 TARGET_POWERHAL_VARIANT := pegasusq
 
+# Selinux
+BOARD_SEPOLICY_DIRS += \
+    device/samsung/n80xx-common/selinux
 
-
+# inherit from the proprietary version
+-include vendor/samsung/n80xx-common/BoardConfigVendor.mk

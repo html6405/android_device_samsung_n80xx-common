@@ -1,4 +1,4 @@
-#define LOG_TAG "RilWrapper"
+#define LOG_TAG "secril-shim"
 #define RIL_SHLIB
 
 #include <pthread.h>

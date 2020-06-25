@@ -229,3 +229,4 @@ static power_profile profiles_low_power[PROFILE_MAX] = {
         .launch_boost_time = 0,
     },
 };
+

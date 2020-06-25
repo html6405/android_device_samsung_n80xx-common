@@ -14,9 +14,15 @@
 # limitations under the License.
 #
 
-DEVICE_PACKAGE_OVERLAYS += device/samsung/n80xx-common/overlay-common
+$(call inherit-product, device/samsung/smdk4412-common/common.mk)
 
-PRODUCT_AAPT_CONFIG := xlarge
+LOCAL_PATH := device/samsung/n80xx-common
+
+# Overlay
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-common
+
+# Screen density
+PRODUCT_AAPT_CONFIG := xlarge mdpi
 PRODUCT_AAPT_PREF_CONFIG := mdpi
 
 TARGET_SCREEN_HEIGHT := 800
@@ -24,41 +30,106 @@ TARGET_SCREEN_WIDTH := 1280
 
 # Init files
 PRODUCT_COPY_FILES += \
-    device/samsung/n80xx-common/ueventd.smdk4x12.rc:root/ueventd.smdk4x12.rc \
-    device/samsung/n80xx-common/ueventd.smdk4x12.rc:recovery/root/ueventd.smdk4x12.rc \
-    device/samsung/n80xx-common/fstab.smdk4x12:root/fstab.smdk4x12 \
-    device/samsung/n80xx-common/twrp.fstab:recovery/root/etc/twrp.fstab
-
-# Recovery
-# TWRP specific build flags
-DEVICE_RESOLUTION := 1280x800
-TW_INTERNAL_STORAGE_PATH := "/data/media"
-TW_INTERNAL_STORAGE_MOUNT_POINT := "data"
-TW_EXTERNAL_STORAGE_PATH := "/external_sdcard"
-TW_EXTERNAL_STORAGE_MOUNT_POINT := "external_sdcard"
-RECOVERY_SDCARD_ON_DATA := true
-BOARD_HAS_NO_REAL_SDCARD := true
-PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
-TW_NO_USB_STORAGE := true
-TWRP_EVENT_LOGGING := false
-TW_IGNORE_MAJOR_AXIS_0 := true
-TW_MAX_BRIGHTNESS := 255
-TW_BRIGHTNESS_PATH := /sys/class/backlight/panel/brightness
-TARGET_RECOVERY_FSTAB := device/samsung/n80xx-common/fstab.smdk4x12
-RECOVERY_FSTAB_VERSION := 2
+    $(LOCAL_PATH)/rootdir/ueventd.smdk4x12.rc:root/ueventd.smdk4x12.rc \
+    $(LOCAL_PATH)/rootdir/ueventd.smdk4x12.rc:recovery/root/ueventd.smdk4x12.rc \
+    $(LOCAL_PATH)/rootdir/fstab.n80xx:root/fstab.smdk4x12
 
 # Audio
 PRODUCT_COPY_FILES += \
-    device/samsung/n80xx-common/configs/audio_policy.conf:system/etc/audio_policy.conf \
-    device/samsung/n80xx-common/configs/tiny_hw.xml:system/etc/sound/n80xx
-        
+    $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
+
+PRODUCT_COPY_FILES += \
+	$(LOCAL_PATH)/configs/tiny_hw.xml:system/etc/sound/n80xx
+
+# prebuild apps
+
+PRODUCT_PACKAGES += \
+	MagiskManager \
+	OpenCamera
+
 # Camera
 PRODUCT_COPY_FILES += \
-    device/samsung/n80xx-common/configs/media_profiles.xml:system/etc/media_profiles.xml
+    $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
 
+PRODUCT_PACKAGES += \
+    camera.smdk4x12
+
+# ConsumerIR
+PRODUCT_PACKAGES += \
+    consumerir.exynos4
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml
+
+# Product specific Packages
+PRODUCT_PACKAGES += \
+    tinyplay \
+    libsecril-client
+
+# Sensors
+PRODUCT_PACKAGES += \
+    sensors.smdk4x12
+
+# Power
+PRODUCT_PACKAGES += \
+    power.smdk4x12
+
+ifeq ($(TARGET_PRODUCT),lineage_n8000)
+# Gps
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/gps.xml:system/etc/gps.xml \
+    $(LOCAL_PATH)/gps_daemon.sh:system/vendor/bin/gps_daemon.sh
+
+PRODUCT_PACKAGES += \
+	gps.smdk4x12
+endif
+
+ifeq ($(TARGET_PRODUCT),lineage_n8000_deodexed)
+# Gps
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/gps.xml:system/etc/gps.xml \
+    $(LOCAL_PATH)/gps_daemon.sh:system/vendor/bin/gps_daemon.sh
+
+PRODUCT_PACKAGES += \
+	gps.smdk4x12
+endif
+
+ifeq ($(TARGET_PRODUCT),lineage_n8010)
+# Gps
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/gps.xml:system/etc/gps.xml \
+    $(LOCAL_PATH)/gps_daemon.sh:system/vendor/bin/gps_daemon.sh
+
+PRODUCT_PACKAGES += \
+	gps.smdk4x12
+endif
+
+# sec_keyboard
+PRODUCT_PACKAGES += \
+	sec_keyboard \
+	libkeyutils
+
+# shim libs for gpsd
+    PRODUCT_PACKAGES += \
+        libn80xx
+
+# RIL
+PRODUCT_PACKAGES += \
+	libsamsung_symbols \
+	libsecril-shim
+
+# f2fs
+PRODUCT_PACKAGES += \
+	fibmap.f2fs \
+	fsck.f2fs \
+	mkfs.f2fs
+
+# RIL
 PRODUCT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1
-    
+    ro.telephony.ril_class=SamsungExynos4RIL \
+    ro.telephony.call_ring.multiple=false \
+    ro.telephony.call_ring.delay=3000
+
 # ART
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dex2oat-flags=--no-watch-dog \
@@ -68,52 +139,15 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     sys.io.scheduler=cfq
 
-# Stlport
-PRODUCT_PACKAGES += \
-    libstlport
-
-# Packages
-PRODUCT_PACKAGES += \
-    camera.smdk4x12 \
-    Snap \
-    libhwjpeg \
-    libsecril-client
-
-# RIL
-PRODUCT_PACKAGES += \
-    libsamsung_symbols \
-    ril-wrapper
-
-# shim libs for gpsd
-PRODUCT_PACKAGES += \
-    libn80xx
-
-# IR packages
-PRODUCT_PACKAGES += \
-    consumerir.exynos4
-
-# f2fs
-PRODUCT_PACKAGES += \
-    fibmap.f2fs \
-    fsck.f2fs \
-    mkfs.f2fs
-
-# Power
-# PRODUCT_PACKAGES += \
-#    power.smdk4x12
-
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml    
-
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml
+    frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
+    frameworks/native/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
+    frameworks/native/data/etc/android.software.connectionservice.xml:system/etc/permissions/android.software.connectionservice.xml
 
 # Set product characteristic to tablet, needed for some ui elements
 PRODUCT_CHARACTERISTICS := tablet
 
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
-
-$(call inherit-product, device/samsung/smdk4412-common/common.mk)
 
 $(call inherit-product-if-exists, vendor/samsung/n80xx/n80xx-vendor.mk)
