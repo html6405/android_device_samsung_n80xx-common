@@ -26,6 +26,6 @@ allow cpboot-daemon cbd_device:chr_file { open read unlink create_file_perms };
 
 
 # FIX ME
-allow cpboot-daemon usbfs:filesystem mount;
-allow cpboot-daemon self:capability { mknod };
-allow cpboot-daemon device:chr_file { read write open };
+#allow cpboot-daemon usbfs:filesystem mount;
+#allow cpboot-daemon self:capability { mknod };
+#allow cpboot-daemon device:chr_file { read write open };
