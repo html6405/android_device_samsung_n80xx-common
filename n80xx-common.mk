@@ -74,7 +74,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.smdk4x12
 
-ifeq ($(TARGET_PRODUCT),lineage_n8000)
+ifeq ($(TARGET_PRODUCT),slim_n8000)
 # Gps
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps.xml:system/etc/gps.xml \
@@ -84,7 +84,7 @@ PRODUCT_PACKAGES += \
 	gps.smdk4x12
 endif
 
-ifeq ($(TARGET_PRODUCT),lineage_n8000_deodexed)
+ifeq ($(TARGET_PRODUCT),slim_n8000_deodexed)
 # Gps
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps.xml:system/etc/gps.xml \
@@ -94,7 +94,7 @@ PRODUCT_PACKAGES += \
 	gps.smdk4x12
 endif
 
-ifeq ($(TARGET_PRODUCT),lineage_n8010)
+ifeq ($(TARGET_PRODUCT),slim_n8010)
 # Gps
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps.xml:system/etc/gps.xml \
