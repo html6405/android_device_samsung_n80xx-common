@@ -33,7 +33,7 @@ allow sysinit netd:dir { search read };
 allow sysinit rild:dir { search read };
 allow sysinit tinyplay:dir { search read };
 allow sysinit gatekeeperd:dir { search read };
-allow sysinit perfprofd:dir { search read };
+#allow sysinit perfprofd:dir { search read };
 allow sysinit bootanim:dir { search read };
 
 allow sysinit ueventd:file { read open };
@@ -60,5 +60,5 @@ allow sysinit netd:file { read open };
 allow sysinit rild:file { read open };
 allow sysinit tinyplay:file { read open };
 allow sysinit gatekeeperd:file { read open };
-allow sysinit perfprofd:file { read open };
+#allow sysinit perfprofd:file { read open };
 allow sysinit bootanim:file { read open };

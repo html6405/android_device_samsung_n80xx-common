@@ -22,11 +22,8 @@ LOCAL_PATH := device/samsung/n80xx-common
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-common
 
 # Screen density
-PRODUCT_AAPT_CONFIG := xlarge mdpi
+PRODUCT_AAPT_CONFIG := large
 PRODUCT_AAPT_PREF_CONFIG := mdpi
-
-TARGET_SCREEN_HEIGHT := 800
-TARGET_SCREEN_WIDTH := 1280
 
 # Init files
 PRODUCT_COPY_FILES += \
@@ -45,7 +42,8 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
 	MagiskManager \
-	OpenCamera
+	OpenCamera \
+	Lightning
 
 # Camera
 PRODUCT_COPY_FILES += \
@@ -108,6 +106,10 @@ endif
 PRODUCT_PACKAGES += \
 	sec_keyboard \
 	libkeyutils
+
+# Updater
+PRODUCT_PACKAGES += \
+    Updater
 
 # shim libs for gpsd
     PRODUCT_PACKAGES += \
