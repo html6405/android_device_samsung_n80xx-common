@@ -18,8 +18,6 @@
 # by BoardConfigVendor.mk
 -include device/samsung/smdk4412-common/BoardCommonConfig.mk
 
-WITHOUT_UPDATE := false
-
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/samsung/n80xx
 TARGET_KERNEL_CONFIG := lineageos_$(TARGET_DEVICE)_defconfig

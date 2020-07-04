@@ -14,5 +14,6 @@ allow init input_device:file { getattr execute read open execute_no_trans };
 #allow init system_file:file { relabelfrom };
 #allow init system_file:file { execute_no_trans };
 
+domain_trans(init, rootfs, sec_keyboard)
 domain_trans(init, rootfs, glgps)
 domain_trans(init, rootfs, cpboot-daemon)
