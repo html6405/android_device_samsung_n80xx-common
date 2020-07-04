@@ -105,8 +105,7 @@ endif
 # sec_keyboard
 PRODUCT_PACKAGES += \
 	sec_keyboard \
-	libkeyutils \
-	dock_kbd_attach
+	libkeyutils
 
 # Updater
 PRODUCT_PACKAGES += \
