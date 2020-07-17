@@ -2,7 +2,7 @@ type cpboot-daemon, domain;
 type cpboot-daemon_exec, exec_type, file_type;
 init_daemon_domain(cpboot-daemon);
 
-permissive cpboot-daemon;
+#permissive cpboot-daemon;
 
 allow cpboot-daemon cgroup:dir { create add_name };
 allow cpboot-daemon device:dir { write remove_name add_name };
@@ -26,6 +26,6 @@ allow cpboot-daemon cbd_device:chr_file { open read unlink create_file_perms };
 
 
 # FIX ME
-allow cpboot-daemon usbfs:filesystem mount;
-allow cpboot-daemon self:capability { mknod };
-allow cpboot-daemon device:chr_file { read write open };
+#allow cpboot-daemon usbfs:filesystem mount;
+#allow cpboot-daemon self:capability { mknod };
+#allow cpboot-daemon device:chr_file { read write open };

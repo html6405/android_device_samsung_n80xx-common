@@ -25,9 +25,6 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-common
 PRODUCT_AAPT_CONFIG := xlarge mdpi
 PRODUCT_AAPT_PREF_CONFIG := mdpi
 
-TARGET_SCREEN_HEIGHT := 800
-TARGET_SCREEN_WIDTH := 1280
-
 # Init files
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/ueventd.smdk4x12.rc:root/ueventd.smdk4x12.rc \
