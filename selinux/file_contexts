@@ -1,3 +1,7 @@
+# Dock
+/dev/ttySAC2                             u:object_r:dock_device:s0
+/system/bin/sec_keyboard                 u:object_r:sec_keyboard_exec:s0
+
 # RIL
 /dev/link_pm                            u:object_r:radio_device:s0
 /dev/umts_boot0                         u:object_r:radio_device:s0
@@ -7,9 +11,6 @@
 /dev/umts_rfs0                          u:object_r:radio_device:s0
 /dev/__cbd_msg_                         u:object_r:cbd_device:s0
 /system/bin/cbd                         u:object_r:cpboot-daemon_exec:s0
-
-# sec_keyboard
-/system/bin/sec_keyboard                u:object_r:input_device:s0
 
 /efs                                    u:object_r:efs_device_file:s0
 #/data/misc/radio(/.*)?                  u:object_r:radio_data:s0
