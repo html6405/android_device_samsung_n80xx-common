@@ -42,7 +42,8 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
 	MagiskManager \
-	OpenCamera
+	OpenCamera \
+	Via
 
 # Camera
 PRODUCT_COPY_FILES += \

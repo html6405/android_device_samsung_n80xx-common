@@ -20,6 +20,8 @@
 
 WITHOUT_UPDATE := false
 
+WITHOUT_JELLY := true
+
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/samsung/n80xx
 TARGET_KERNEL_CONFIG := lineageos_$(TARGET_DEVICE)_defconfig
