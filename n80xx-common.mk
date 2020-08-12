@@ -41,9 +41,12 @@ PRODUCT_COPY_FILES += \
 # prebuild apps
 
 PRODUCT_PACKAGES += \
+	messaging \
 	MagiskManager \
 	OpenCamera \
-	Lightning
+	Via \
+	Terminal \
+	Vanilla_Music
 
 # Camera
 PRODUCT_COPY_FILES += \
