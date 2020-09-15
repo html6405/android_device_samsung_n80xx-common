@@ -18,6 +18,8 @@ $(call inherit-product, device/samsung/smdk4412-common/common.mk)
 
 LOCAL_PATH := device/samsung/n80xx-common
 
+TARGET_BUILD_VARIANT:=user
+
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-common
 
