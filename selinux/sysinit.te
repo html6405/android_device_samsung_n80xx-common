@@ -62,3 +62,5 @@ allow sysinit tinyplay:file { read open };
 allow sysinit gatekeeperd:file { read open };
 #allow sysinit perfprofd:file { read open };
 allow sysinit bootanim:file { read open };
+allow sysinit SecTVOut:dir { search };
+allow sysinit SecTVOut:file { read open };

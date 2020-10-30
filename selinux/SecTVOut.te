@@ -1,0 +1,14 @@
+# SecTVOut
+type SecTVOut, domain;
+type SecTVOut_exec, exec_type, file_type;
+
+init_daemon_domain(SecTVOut)
+
+#allow SecTVOut default_android_service:service_manager { add };
+allow SecTVOut servicemanager:binder { transfer call };
+# allow SecTVOut media_rw_data_file:file { execute };
+
+type SecTVOut_Instantiate, domain;
+type SecTVOut_Instantiate_exec, exec_type, file_type;
+
+init_daemon_domain(SecTVOut_Instantiate)

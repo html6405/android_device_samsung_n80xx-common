@@ -18,6 +18,8 @@
 # by BoardConfigVendor.mk
 -include device/samsung/smdk4412-common/BoardCommonConfig.mk
 
+TARGET_BUILD_VARIANT:=user
+
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/samsung/n80xx
 TARGET_KERNEL_CONFIG := lineageos_$(TARGET_DEVICE)_defconfig
@@ -73,6 +75,9 @@ BOARD_CAMERA_MSG_MGMT := true
 
 #HWC
 BOARD_USE_SYSFS_VSYNC_NOTIFICATION := false
+#BOARD_USES_PROPRIETARY_HWC := true
+#BOARD_USES_HWC_SERVICES =: true
+#TARGET_USES_HWC2 =: true
 
 # Filesystem
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1444888576
@@ -93,10 +98,14 @@ TARGET_RECOVERY_DENSITY := mdpi
 TARGET_USERIMAGES_USE_F2FS := true
 RECOVERY_FSTAB_VERSION := 2
 
-# HDMIE
+# HDMI
 #BOARD_USES_HDMI := true
-#BOARD_HDMI_STD := true
+#BOARD_HDMI_STD := STD_720P
+#ifeq ($(BOARD_USES_PROPRIETARY_HWC),true)
 #BOARD_HDMI_DDC_CH := DDC_CH_I2C_5
+#else
+#BOARD_HDMI_DDC_CH := DDC_CH_I2C_7
+#endif
 
 # PowerHAL
 TARGET_POWERHAL_VARIANT := pegasusq

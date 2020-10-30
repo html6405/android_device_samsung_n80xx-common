@@ -46,7 +46,18 @@ PRODUCT_PACKAGES += \
 	OpenCamera \
 	Via \
 	Terminal \
-	Vanilla_Music
+	Vanilla_Music \
+	afhDownloader
+
+#HDMI
+PRODUCT_PACKAGES += \
+	libcec \
+	libddc \
+	libedid \
+	libTVOut \
+	libhdmiclient \
+    libExynosHWCService \
+    libExynosIPService
 
 # Camera
 PRODUCT_COPY_FILES += \
@@ -75,27 +86,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.smdk4x12
 
-ifeq ($(TARGET_PRODUCT),slim_n8000)
-# Gps
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/gps.xml:system/etc/gps.xml \
-    $(LOCAL_PATH)/gps_daemon.sh:system/vendor/bin/gps_daemon.sh
-
-PRODUCT_PACKAGES += \
-	gps.smdk4x12
-endif
-
-ifeq ($(TARGET_PRODUCT),slim_n8000_deodexed)
-# Gps
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/gps.xml:system/etc/gps.xml \
-    $(LOCAL_PATH)/gps_daemon.sh:system/vendor/bin/gps_daemon.sh
-
-PRODUCT_PACKAGES += \
-	gps.smdk4x12
-endif
-
-ifeq ($(TARGET_PRODUCT),slim_n8010)
+ifneq ($(TARGET_PRODUCT),slim_n8020)
 # Gps
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps.xml:system/etc/gps.xml \

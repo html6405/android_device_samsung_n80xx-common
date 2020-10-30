@@ -2,6 +2,9 @@
 /dev/ttySAC2                             u:object_r:dock_device:s0
 /system/bin/sec_keyboard                 u:object_r:sec_keyboard_exec:s0
 
+# HDMI
+/system/bin/bintvoutservice              u:object_r:SecTVOut_exec:s0
+
 # RIL
 /dev/link_pm                            u:object_r:radio_device:s0
 /dev/umts_boot0                         u:object_r:radio_device:s0
