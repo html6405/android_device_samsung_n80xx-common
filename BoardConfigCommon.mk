@@ -18,6 +18,8 @@
 # by BoardConfigVendor.mk
 -include device/samsung/smdk4412-common/BoardCommonConfig.mk
 
+TARGET_BUILD_VARIANT:=user
+
 WITHOUT_UPDATE := false
 
 # Kernel
