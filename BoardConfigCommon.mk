@@ -29,17 +29,7 @@ TARGET_KERNEL_CONFIG := lineageos_$(TARGET_DEVICE)_defconfig
 # Wifi
 WIFI_DRIVER_MODULE_PATH :=
 
-ifeq ($(TARGET_PRODUCT),lineage_n8000)
-# Headers
-TARGET_SPECIFIC_HEADER_PATH += device/samsung/n80xx-common/include
-endif
-
-ifeq ($(TARGET_PRODUCT),lineage_n8000_deodexed)
-# Headers
-TARGET_SPECIFIC_HEADER_PATH += device/samsung/n80xx-common/include
-endif
-
-ifeq ($(TARGET_PRODUCT),lineage_n8010)
+ifneq ($(TARGET_PRODUCT),lineage_n8020)
 # Headers
 TARGET_SPECIFIC_HEADER_PATH += device/samsung/n80xx-common/include
 endif
