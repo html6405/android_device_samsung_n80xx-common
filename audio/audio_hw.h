@@ -129,7 +129,7 @@ struct route_setting voicecall_default_disable[] = {
 struct route_setting default_input[] = {
     { .ctl_name = "Main Mic Switch", .intval = 1, },
     { .ctl_name = "IN1L Volume", .intval = 30, },
- 
+
     { .ctl_name = "AIF1ADCL Source", .intval=0, },
     { .ctl_name = "AIF1ADCR Source", .intval=0, },
     { .ctl_name = "AIF2ADCL Source", .intval=0, },
@@ -138,10 +138,10 @@ struct route_setting default_input[] = {
     { .ctl_name = "AIF2DAC2L Mixer Right Sidetone Switch", .intval=0, },
     { .ctl_name = "AIF2DAC2R Mixer Left Sidetone Switch", .intval=1, },
     { .ctl_name = "AIF2DAC2R Mixer Right Sidetone Switch", .intval=0, },
- 
+
     { .ctl_name = "MIXINL IN1L Switch", .intval = 1, },
     { .ctl_name = "MIXINL IN1L Volume", .intval = 0, },
- 
+
     { .ctl_name = "AIF1ADC1 HPF Mode", .intval = 0, },
     { .ctl_name = "AIF1ADC1 HPF Switch", .intval = 1, },
 

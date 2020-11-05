@@ -24,6 +24,7 @@
 #include <errno.h>
 #include <pthread.h>
 #include <stdint.h>
+#include <android/api-level.h>
 #include <sys/time.h>
 #include <stdlib.h>
 #include <expat.h>
@@ -44,6 +45,8 @@
 
 #include "audio_hw.h"
 #include "ril_interface.h"
+
+extern void android_set_application_target_sdk_version(uint32_t target);
 
 struct pcm_config pcm_config_mm = {
     .channels = 2,
@@ -104,6 +107,7 @@ struct m0_audio_device {
     bool mic_mute;
     struct echo_reference_itfe *echo_reference;
     bool bluetooth_nrec;
+    bool bluetooth_wb;
     int wb_amr;
     bool screen_off;
 
@@ -363,6 +367,7 @@ static int start_call(struct m0_audio_device *adev)
     if (bt_on) {
        /* use amr-nb for bluetooth */
        pcm_config_vx.rate = VX_NB_SAMPLING_RATE;
+       pcm_config_vx.rate = adev->bluetooth_wb ? VX_WB_SAMPLING_RATE : VX_NB_SAMPLING_RATE;
     } else {
        pcm_config_vx.rate = adev->wb_amr ? VX_WB_SAMPLING_RATE : VX_NB_SAMPLING_RATE;
     }
@@ -2520,6 +2525,16 @@ static void adev_close_output_stream(struct audio_hw_device *dev,
     free(stream);
 }
 
+static void adev_set_voice_session_bt_wideband(struct m0_audio_device *adev, bool enable)
+{
+    adev->bluetooth_wb = enable;
+
+    if (adev->mode == AUDIO_MODE_IN_CALL) {
+        end_call(adev);
+        start_call(adev);
+    }
+}
+
 static int adev_set_parameters(struct audio_hw_device *dev, const char *kvpairs)
 {
     struct m0_audio_device *adev = (struct m0_audio_device *)dev;
@@ -2535,6 +2550,14 @@ static int adev_set_parameters(struct audio_hw_device *dev, const char *kvpairs)
             adev->bluetooth_nrec = true;
         else
             adev->bluetooth_nrec = false;
+    }
+
+    ret = str_parms_get_str(parms, AUDIO_PARAMETER_KEY_BT_SCO_WB, value, sizeof(value));
+    if (ret >= 0) {
+        if (strcmp(value, AUDIO_PARAMETER_VALUE_ON) == 0)
+            adev_set_voice_session_bt_wideband(adev, true);
+        else
+            adev_set_voice_session_bt_wideband(adev, false);
     }
 
     ret = str_parms_get_str(parms, "screen_off", value, sizeof(value));
@@ -2970,6 +2993,8 @@ static int adev_open(const hw_module_t* module, const char* name,
 {
     struct m0_audio_device *adev;
     int ret;
+
+    android_set_application_target_sdk_version(__ANDROID_API_L_MR1__);
 
     if (strcmp(name, AUDIO_HARDWARE_INTERFACE) != 0)
         return -EINVAL;

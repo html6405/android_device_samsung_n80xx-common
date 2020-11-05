@@ -12,8 +12,8 @@
 /dev/block/platform/dw_mmc/by-name/OTA /misc emmc		defaults										defaults
 
 # vold-managed volumes ("block device" is actually a sysfs devpath)
-/devices/platform/s3c-sdhci.2/mmc_host/mmc1*		/storage/sdcard1		auto		defaults		voldmanaged=sdcard1:auto,encryptable=userdata
-/devices/platform/s5p-ehci*						/storage/usbdisk0		auto		defaults		voldmanaged=usb:auto,noemulatesd
+/devices/platform/s3c-sdhci.2/mmc_host/mmc1*/mmcblk1		auto		auto		defaults		voldmanaged=sdcard1:auto,encryptable=userdata
+/devices/platform/s5p-ehci*					auto		auto		defaults		voldmanaged=usb:auto
 
 # recovery
 /dev/block/mmcblk0p5		/boot				emmc		defaults		recoveryonly
@@ -21,4 +21,4 @@
 /dev/block/mmcblk0p7		/modem				emmc		defaults		recoveryonly
 
 # zram
-/dev/block/zram0			none				swap		defaults		zramsize=419430400,zramstreams=2
+/dev/block/zram0			none				swap		defaults		zramsize=419430400

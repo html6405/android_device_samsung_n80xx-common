@@ -1,2 +1,0 @@
-allow zygote log_device:dir search;
-allow zygote input_device:dir { read };
