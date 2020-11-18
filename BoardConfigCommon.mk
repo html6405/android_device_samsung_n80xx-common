@@ -28,6 +28,8 @@ LIBART_IMG_BASE := 0x30000000
 
 # Graphics
 TARGET_REQUIRES_SYNCHRONOUS_SETSURFACE := true
+BOARD_EGL_WORKAROUND_BUG_10194508 := true
+BOARD_GLOBAL_CFLAGS += -DWORKAROUND_BUG_10194508
 
 TARGET_ENABLE_MEDIADRM_64 := true
 
@@ -48,11 +50,6 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 2048
 TARGET_RECOVERY_DEVICE_DIRS += device/samsung/n80xx-common
 
-# Enable dex-preoptimization to speed up first boot sequence
-#ifeq ($(HOST_OS),linux)
-#  WITH_DEXPREOPT := true
-#endif
-
 # Recovery
 TARGET_RECOVERY_FSTAB := device/samsung/n80xx-common/rootdir/fstab.n80xx
 TARGET_RECOVERY_DENSITY := mdpi
@@ -61,6 +58,3 @@ RECOVERY_FSTAB_VERSION := 2
 
 # PowerHAL
 TARGET_POWERHAL_VARIANT := pegasusq
-
-# assert
-TARGET_OTA_ASSERT_DEVICE := c0,p4notewifi,p4notewifiww,n8013,GT-N8013,n8010,GT-N8010
