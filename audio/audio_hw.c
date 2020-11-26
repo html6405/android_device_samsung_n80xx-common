@@ -46,8 +46,6 @@
 #include "audio_hw.h"
 #include "ril_interface.h"
 
-extern void android_set_application_target_sdk_version(uint32_t target);
-
 struct pcm_config pcm_config_mm = {
     .channels = 2,
     .rate = MM_FULL_POWER_SAMPLING_RATE,
@@ -366,7 +364,6 @@ static int start_call(struct m0_audio_device *adev)
 
     if (bt_on) {
        /* use amr-nb for bluetooth */
-       pcm_config_vx.rate = VX_NB_SAMPLING_RATE;
        pcm_config_vx.rate = adev->bluetooth_wb ? VX_WB_SAMPLING_RATE : VX_NB_SAMPLING_RATE;
     } else {
        pcm_config_vx.rate = adev->wb_amr ? VX_WB_SAMPLING_RATE : VX_NB_SAMPLING_RATE;
@@ -501,7 +498,7 @@ static void set_incall_device(struct m0_audio_device *adev)
 {
     int device_type;
 
-    switch(adev->out_device) {        
+    switch(adev->out_device) {
         case AUDIO_DEVICE_OUT_SPEAKER:
         case AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET:
         case AUDIO_DEVICE_OUT_DGTL_DOCK_HEADSET:
@@ -572,7 +569,7 @@ static void select_mode(struct m0_audio_device *adev)
             a call. This works because we're sure that the audio policy
             manager will update the output device after the audio mode
             change, even if the device selection did not change. */
-            if (adev->out_device == AUDIO_DEVICE_OUT_SPEAKER) {                
+            if (adev->out_device == AUDIO_DEVICE_OUT_SPEAKER) {
                 adev->in_device = AUDIO_DEVICE_IN_BUILTIN_MIC & ~AUDIO_DEVICE_BIT_IN;
             } else
                 adev->out_device &= ~AUDIO_DEVICE_OUT_SPEAKER;
@@ -594,7 +591,8 @@ static void select_mode(struct m0_audio_device *adev)
             ALOGD("%s: set voicecall route: voicecall_default_disable", __func__);
             set_bigroute_by_array(adev->mixer, voicecall_default_disable, 1);
             ALOGD("%s: set voicecall route: default_input_disable", __func__);
-            set_bigroute_by_array(adev->mixer, default_input_disable, 1);            
+            set_bigroute_by_array(adev->mixer, default_input_disable, 1);
+            set_noise_supression(adev, 0);
             ALOGD("%s: set voicecall route: headset_input_disable", __func__);
             set_bigroute_by_array(adev->mixer, headset_input_disable, 1);
             ALOGD("%s: set voicecall route: bt_disable", __func__);
@@ -612,13 +610,13 @@ static void select_output_device(struct m0_audio_device *adev)
 {
     int headset_on;
     int headphone_on;
-    int speaker_on;    
+    int speaker_on;
     int bt_on;
     unsigned int channel;
 
     headset_on = adev->out_device & AUDIO_DEVICE_OUT_WIRED_HEADSET;
     headphone_on = adev->out_device & AUDIO_DEVICE_OUT_WIRED_HEADPHONE;
-    speaker_on = adev->out_device & AUDIO_DEVICE_OUT_SPEAKER;    
+    speaker_on = adev->out_device & AUDIO_DEVICE_OUT_SPEAKER;
     bt_on = adev->out_device & AUDIO_DEVICE_OUT_ALL_SCO;
 
     switch(adev->out_device) {
@@ -630,7 +628,7 @@ static void select_output_device(struct m0_audio_device *adev)
             break;
         case AUDIO_DEVICE_OUT_WIRED_HEADPHONE:
             ALOGD("%s: AUDIO_DEVICE_OUT_WIRED_HEADPHONE", __func__);
-            break;       
+            break;
         case AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET:
             ALOGD("%s: AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET", __func__);
             break;
@@ -667,10 +665,12 @@ static void select_output_device(struct m0_audio_device *adev)
 
         if (speaker_on || headphone_on) {
             ALOGD("%s: set voicecall route: default_input", __func__);
-            set_bigroute_by_array(adev->mixer, default_input, 1);            
+            set_bigroute_by_array(adev->mixer, default_input, 1);
+            set_noise_supression(adev, 1);
         } else {
             ALOGD("%s: set voicecall route: default_input_disable", __func__);
-            set_bigroute_by_array(adev->mixer, default_input_disable, 1);         
+            set_bigroute_by_array(adev->mixer, default_input_disable, 1);
+            set_noise_supression(adev, 0);
         }
 
         if (headset_on) {
@@ -702,7 +702,7 @@ static void select_input_device(struct m0_audio_device *adev)
         case AUDIO_DEVICE_IN_BUILTIN_MIC:
             ALOGD("%s: AUDIO_DEVICE_IN_BUILTIN_MIC", __func__);
             break;
-        case AUDIO_DEVICE_IN_BACK_MIC:            
+        case AUDIO_DEVICE_IN_BACK_MIC:
             ALOGD("%s: AUDIO_DEVICE_IN_BACK_MIC and AUDIO_DEVICE_IN_BUILTIN_MIC", __func__);
             break;
         case AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET:
@@ -2782,12 +2782,12 @@ static const struct {
     const char *name;
 } dev_names[] = {
     { AUDIO_DEVICE_OUT_SPEAKER, "speaker" },
-    { AUDIO_DEVICE_OUT_WIRED_HEADSET | AUDIO_DEVICE_OUT_WIRED_HEADPHONE, "headphone" },    
+    { AUDIO_DEVICE_OUT_WIRED_HEADSET | AUDIO_DEVICE_OUT_WIRED_HEADPHONE, "headphone" },
     { AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET, "analog-dock" },
     { AUDIO_DEVICE_OUT_DGTL_DOCK_HEADSET, "digital-dock" },
     { AUDIO_DEVICE_OUT_ALL_SCO, "sco-out" },
     { AUDIO_DEVICE_OUT_AUX_DIGITAL, "aux-digital" },
-    { AUDIO_DEVICE_IN_BUILTIN_MIC | AUDIO_DEVICE_IN_BACK_MIC, "builtin-mic" },    
+    { AUDIO_DEVICE_IN_BUILTIN_MIC | AUDIO_DEVICE_IN_BACK_MIC, "builtin-mic" },
     { AUDIO_DEVICE_IN_WIRED_HEADSET, "headset-in" },
     { AUDIO_DEVICE_IN_ALL_SCO, "sco-in" },
 };
@@ -2934,14 +2934,15 @@ static int adev_config_parse(struct m0_audio_device *adev)
 {
     struct config_parse_state s;
     FILE *f;
-    XML_Parser p;    
+    XML_Parser p;
+    char property[PROPERTY_VALUE_MAX];
     char file[80];
     int ret = 0;
     bool eof = false;
     int len;
 
     snprintf(file, sizeof(file), "/system/etc/sound/%s", "n80xx");
-    
+
     ALOGV("Reading configuration from %s\n", file);
     f = fopen(file, "r");
     if (!f) {
@@ -2993,8 +2994,6 @@ static int adev_open(const hw_module_t* module, const char* name,
 {
     struct m0_audio_device *adev;
     int ret;
-
-    android_set_application_target_sdk_version(__ANDROID_API_L_MR1__);
 
     if (strcmp(name, AUDIO_HARDWARE_INTERFACE) != 0)
         return -EINVAL;
@@ -3052,8 +3051,12 @@ static int adev_open(const hw_module_t* module, const char* name,
     /* RIL */
     ril_open(&adev->ril);
     pthread_mutex_unlock(&adev->lock);
-    /* register callback for wideband AMR setting */
-    ril_register_set_wb_amr_callback(audio_set_wb_amr_callback, (void *)adev);
+    if (property_get_bool("audio.force_wideband", false)) {
+        adev->wb_amr = true;
+    } else {
+        /* register callback for wideband AMR setting */
+        ril_register_set_wb_amr_callback(audio_set_wb_amr_callback, (void *)adev);
+    }
 
     *device = &adev->hw_device.common;
 

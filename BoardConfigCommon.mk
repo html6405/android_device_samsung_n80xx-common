@@ -26,9 +26,12 @@ MALLOC_SVELTE := true
 TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 LIBART_IMG_BASE := 0x30000000
 
+TARGET_LD_SHIM_LIBS := \
+    /vendor/bin/glgps|libgps_symbols.so
+
 # Graphics
 TARGET_REQUIRES_SYNCHRONOUS_SETSURFACE := true
-
+BOARD_EGL_NEEDS_HANDLE_VALUE := true
 TARGET_ENABLE_MEDIADRM_64 := true
 
 # Bluetooth
@@ -48,10 +51,6 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 2048
 TARGET_RECOVERY_DEVICE_DIRS += device/samsung/n80xx-common
 
-# Enable dex-preoptimization to speed up first boot sequence
-#ifeq ($(HOST_OS),linux)
-#  WITH_DEXPREOPT := true
-#endif
 
 # Recovery
 TARGET_RECOVERY_FSTAB := device/samsung/n80xx-common/rootdir/fstab.n80xx
@@ -61,6 +60,3 @@ RECOVERY_FSTAB_VERSION := 2
 
 # PowerHAL
 TARGET_POWERHAL_VARIANT := pegasusq
-
-# assert
-TARGET_OTA_ASSERT_DEVICE := c0,p4notewifi,p4notewifiww,n8013,GT-N8013,n8010,GT-N8010

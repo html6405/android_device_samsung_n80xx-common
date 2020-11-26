@@ -27,6 +27,7 @@ PRODUCT_AAPT_PREF_CONFIG := mdpi
 # Init files
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/rootdir/fstab.n80xx:root/fstab.smdk4x12 \
+	$(LOCAL_PATH)/rootdir/fstab.n80xx:$(TARGET_COPY_OUT_RAMDISK)/fstab.smdk4x12 \
     $(LOCAL_PATH)/rootdir/ueventd.smdk4x12.rc:root/ueventd.smdk4x12.rc \
     $(LOCAL_PATH)/rootdir/ueventd.smdk4x12.rc:recovery/root/ueventd.smdk4x12.rc \
 
@@ -50,6 +51,9 @@ PRODUCT_PACKAGES += \
 	sec_keyboard \
 	libkeyutils
 
+# Proprietary blobs dependency on libstlport
+PRODUCT_PACKAGES +=  libstlport
+
 # Sensors
 PRODUCT_PACKAGES += \
     sensors.smdk4x12 \
@@ -65,7 +69,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps.xml:system/vendor/etc/gps.xml
 
 PRODUCT_PACKAGES += \
-	gps.smdk4x12
+	gps.smdk4x12 \
+	libgps_symbols
 endif
 
 
@@ -98,11 +103,6 @@ PRODUCT_PACKAGES += \
 	fibmap.f2fs \
 	fsck.f2fs \
 	mkfs.f2fs
-
-#DRM
-PRODUCT_PACKAGES += \
-    android.hardware.drm@1.0-impl \
-    android.hardware.drm@1.0-service \
 
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \

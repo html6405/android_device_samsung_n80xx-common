@@ -1,4 +1,4 @@
-# Copyright (C) 2011 The Android Open Source Project
+# Copyright (C) 2015 The CyanogenMod Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,18 +16,14 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := audio.primary.$(TARGET_BOOTLOADER_BOARD_NAME)
-LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
+LOCAL_SRC_FILES := \
+    glgps.cpp
+
+LOCAL_SHARED_LIBRARIES := libssl
+
+LOCAL_MODULE := libgps_symbols
 LOCAL_MODULE_TAGS := optional
-
-LOCAL_SRC_FILES := audio_hw.c ril_interface.c
-
-LOCAL_C_INCLUDES += \
-	external/tinyalsa/include \
-	external/expat/lib \
-	$(call include-path-for, audio-utils) \
-	$(call include-path-for, audio-effects)
-
-LOCAL_SHARED_LIBRARIES := liblog libcutils libtinyalsa libaudioutils libdl libexpat
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_VENDOR_MODULE := true
 
 include $(BUILD_SHARED_LIBRARY)

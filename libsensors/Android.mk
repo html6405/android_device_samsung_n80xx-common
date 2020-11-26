@@ -17,8 +17,6 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-ifneq ($(OLD_SENSORLIB),true)
-
 LOCAL_SRC_FILES := \
 	smdk4x12_sensors.c \
 	input.c \
@@ -48,4 +46,3 @@ LOCAL_VENDOR_MODULE := true
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
-endif

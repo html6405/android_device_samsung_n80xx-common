@@ -304,6 +304,10 @@
 
     <bool name="config_enableWifiDisplay">true</bool>
 
+    <integer name="config_maxNotificationIcons">15</integer>
+    <integer name="config_maxVisibleNotificationIcons">14</integer>
+    <integer name="config_maxVisibleNotificationIconsWhenDark">15</integer>
+
     <!-- The RadioAccessFamilies supported by the device.
          Empty is viewed as "all".  Only used on devices which
          don't support RIL_REQUEST_GET_RADIO_CAPABILITY

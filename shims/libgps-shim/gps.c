@@ -31,8 +31,6 @@
 // Speed conversion km/h to gps speed-value
 #define SPEED_CONVERT 0.2728
 
-extern void android_set_application_target_sdk_version(uint32_t target);
-
 static const GpsFilterLocation defaultFilterLocation = { 10, true, 1.0f, 5, 60000 };
 
 static const GpsFilterLocation gpsFilterLocations[] = {
@@ -599,8 +597,6 @@ static int open_gps(const struct hw_module_t* module, char const* name,
 	struct hw_module_t *realHalSym;
 
 	struct gps_device_t **gps = (struct gps_device_t **)device;
-
-    android_set_application_target_sdk_version(__ANDROID_API_L_MR1__);
 
 	realGpsLib = dlopen(REAL_GPS_PATH, RTLD_LOCAL);
 	if (!realGpsLib) {
