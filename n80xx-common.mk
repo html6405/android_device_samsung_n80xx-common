@@ -91,12 +91,12 @@ PRODUCT_PACKAGES += \
 
 # ConsumerIR
 PRODUCT_PACKAGES += \
-    consumerir.exynos4
-    #android.hardware.ir@1.0-impl \
-    #android.hardware.ir@1.0-service
+    consumerir.exynos4 \
+    android.hardware.ir@1.0-impl \
+    android.hardware.ir@1.0-service.samsung
 
-#PRODUCT_COPY_FILES += \
-#    frameworks/native/data/etc/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml
+PRODUCT_COPY_FILES += \
+   	frameworks/native/data/etc/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml
 
 # f2fs
 PRODUCT_PACKAGES += \
@@ -117,8 +117,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml
 
 # Reduce dalvik heap size
-PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.heapsize=256m \
+# PRODUCT_PROPERTY_OVERRIDES += \
+#    dalvik.vm.heapsize=256m \
 
 # UMS
 PRODUCT_COPY_FILES += \
