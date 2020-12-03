@@ -33,6 +33,10 @@
     <!-- Flag indicating whether we should enable the automatic brightness.
          Software implementation will be used if config_hardware_auto_brightness_available is not set -->
     <bool name="config_automatic_brightness_available">true</bool>
+
+    <!-- If true, the display will be shifted around in ambient mode. -->
+    <bool name="config_enableBurnInProtection">false</bool>
+
     <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
         The N entries of this array define N + 1 zones as follows:
 
@@ -45,7 +49,7 @@
         Must be overridden in platform specific overlays
     -->
     <integer-array name="config_autoBrightnessLevels">
-        <item>10</item>
+        <item>6</item>
         <item>150</item>
         <item>600</item>
         <item>1000</item>
@@ -67,8 +71,8 @@
         than the size of the config_autoBrightnessLevels array.
     -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>20</item>
         <item>40</item>
+        <item>50</item>
         <item>60</item>
         <item>65</item>
         <item>70</item>
@@ -143,7 +147,7 @@
     </integer-array>
 
     <!-- Screen brightness when dozing. -->
-    <integer name="config_screenBrightnessDoze">20</integer>
+    <integer name="config_screenBrightnessDoze">30</integer>
 
     <!-- Dream of notifications -->
     <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
@@ -225,6 +229,9 @@
         <item>5</item>
         <item>7</item>
     </integer-array>
+
+    <!-- Boolean indicating whether the wifi chipset has dual frequency band support -->
+    <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
 
     <!-- Indicate whether the SD card is accessible without removing the battery. -->
     <bool name="config_batterySdCardAccessibility">true</bool>
