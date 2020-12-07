@@ -18,7 +18,7 @@
 
     <string name="updater_server_url" translatable="false">http://html6405.ddns.net/{device}/html6405/LOS16.xml</string>
 
-    <string name="menu_changelog_url" translatable="false">https://forum.xda-developers.com/t/lineageos-16-0-android-9-for-gt-n8000-gt-n8010-gt-n8013-gt-n8020.4182187/post-83795341<xliff:g id="device_name">%1$s</xliff:g>/changes</string>
+    <string name="menu_changelog_url" translatable="false">https://forum.xda-developers.com/t/lineageos-16-0-android-9-for-gt-n8000-gt-n8010-gt-n8013-gt-n8020.4182187/post-83795341</string>
 
 </resources>
 
