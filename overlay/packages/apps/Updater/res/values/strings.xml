@@ -18,7 +18,7 @@
 
     <string name="updater_server_url" translatable="false">http://html6405.ddns.net/{device}/html6405/LOS17.xml</string>
 
-    <string name="menu_changelog_url" translatable="false">https://forum.xda-developers.com/galaxy-note-10-1/development/rom-lineageos-16-0-t4182187/<xliff:g id="device_name">%1$s</xliff:g>/changes</string>
+    <string name="menu_changelog_url" translatable="false">https://forum.xda-developers.com/t/lineageos-17-1-android-10-for-gt-n8000-gt-n8010-gt-n8013-gt-n8020-preview-alpha-build.4204285/post-84124605</string>
 
 </resources>
 
