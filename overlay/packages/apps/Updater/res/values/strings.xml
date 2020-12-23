@@ -16,7 +16,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="updater_server_url" translatable="false">http://html6405.ddns.net/{device}/html6405/LOS17.xml</string>
+    <string name="updater_server_url" translatable="false">http://html6405.ddns.net/{device}/html6405/LOS18.xml</string>
 
     <string name="menu_changelog_url" translatable="false">https://forum.xda-developers.com/t/lineageos-17-1-android-10-for-gt-n8000-gt-n8010-gt-n8013-gt-n8020-preview-alpha-build.4204285/post-84124605</string>
 

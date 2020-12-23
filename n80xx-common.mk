@@ -81,9 +81,11 @@ PRODUCT_PACKAGES += \
     SamsungServiceMode \
     tinyplay
 
+ifneq ($(TARGET_PRODUCT),lineage_n8010)
 # RIL
 PRODUCT_PACKAGES += \
 	libsecril-shim
+endif
 
 # Camera
 PRODUCT_PACKAGES += \
