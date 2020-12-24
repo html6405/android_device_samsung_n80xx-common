@@ -37,7 +37,6 @@ BOARD_EGL_NEEDS_HANDLE_VALUE := true
 TARGET_ENABLE_MEDIADRM_64 := true
 
 # HIDL
-DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
 DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
 
 # Bluetooth
