@@ -41,7 +41,6 @@ PRODUCT_COPY_FILES += \
 # prebuild apps
 
 PRODUCT_PACKAGES += \
-	MagiskManager \
 	OpenCamera \
 	Via
 
