@@ -7,6 +7,6 @@ allow sysinit sysfs_cpuinfo:file { getattr open read };
 allow sysinit system_file:dir { open read };
 allow sysinit system_file:file execute_no_trans;
 allow sysinit toolbox_exec:file { getattr execute execute_no_trans open read };
-allow sysinit firmware_exynos:dir { getattr open read search };
-allow sysinit firmware_exynos:file { getattr open read setattr write };
+allow sysinit firmware_exynos:dir { getattr open read search add_name write  };
+allow sysinit firmware_exynos:file { getattr open read setattr write create };
 allow sysinit self:capability { chown fowner fsetid };
