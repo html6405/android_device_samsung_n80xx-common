@@ -1,1 +1,1 @@
-allow uncrypt block_device:blk_file { open read write };
+allow uncrypt misc_block_device:blk_file { open read write };
