@@ -39,5 +39,10 @@ allow init sysfs_mmc:file { setattr write };
 allow init sysfs_mmc:file open;
 allow init wifi_firmware_path:file setattr;
 allow init bootanim_exec:lnk_file { getattr };
+allow init sysfs_add_random:file { open write };
+allow init gpu_device:chr_file ioctl;
+allow init surfaceflinger:binder call;
+allow init surfaceflinger:fd use;
+allow init sysfs_usb:file { setattr write };
 
 domain_auto_trans(init, rootfs, cpboot-daemon, macloader, tinyplay, sec_keyboard, glgps, cpboot-daemon)
