@@ -5,7 +5,7 @@ permissive hal_wifi_default;
 allow hal_wifi_default hal_wifi_supplicant_default_exec:file entrypoint;
 allow hal_wifi_default efs_file:dir search;
 allow hal_wifi_default self:capability { setgid setuid };
-allow hal_wifi_default self:packet_socket { read bind create };
+allow hal_wifi_default self:packet_socket { read bind create write };
 allow hal_wifi_default system_data_file:file { open read };
 allow hal_wifi_default wpa_data_file:dir { setattr write remove_name rmdir search add_name };
 allow hal_wifi_default rfkill_device:chr_file { open read };
