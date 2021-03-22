@@ -47,4 +47,6 @@ allow init sysfs_usb:file { setattr write };
 allow init hal_configstore_ISurfaceFlingerConfigs:hwservice_manager find;
 allow init hal_graphics_mapper_hwservice:hwservice_manager find;
 
-domain_auto_trans(init, rootfs, cpboot-daemon, macloader, tinyplay, sec_keyboard, glgps, cpboot-daemon)
+allow init { domain -lmkd -crash_dump }:process noatsecure;
+domain_trans(init, rootfs, cpboot-daemon)
+
