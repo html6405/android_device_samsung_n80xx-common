@@ -19,3 +19,5 @@ allow system_server gps_data_file:fifo_file open;
 allow system_server init:fifo_file write;
 # Only allowed because of TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS
 allow system_server vendor_file:file execmod;
+allow system_server rild:binder call;
+allow system_server radioreset:fd use;
