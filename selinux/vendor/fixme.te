@@ -1,15 +1,16 @@
 #============= cpboot-daemon ==============
 #allow cpboot-daemon device:chr_file { open read write };
-#allow cpboot-daemon self:capability mknod;
+#allow cpboot-daemon self:capability { mknod dac_override };
 
 #============= init ==============
-allow init sysfs:file { open read write };
+#allow init sysfs:file { read write open };
 #allow init system_file:file execute_no_trans;
 #allow init vendor_file:file execute_no_trans;
 #allow init settings_service:service_manager find;
 #allow init system_file:dir relabelfrom;
 #allow init system_file:lnk_file relabelfrom;
 #allow init bootanim_exec:lnk_file { relabelfrom };
+#allow init adb_data_file:file { execute execute_no_trans };
 
 #============= priv_app ==============
 #allow priv_app method_trace_data_file:file { execute read unlink };
@@ -40,6 +41,14 @@ allow init sysfs:file { open read write };
 #============= untrusted_app ==============
 #allow untrusted_app method_trace_data_file:file { execute read unlink };
 #allow untrusted_app init:file { open read };
+#allow untrusted_app hal_memtrack_hwservice:hwservice_manager find;
+#allow untrusted_app proc:file { open read };
+#allow untrusted_app proc_stat:file { open };
+#allow untrusted_app dalvikcache_data_file:file execmod;
+#allow untrusted_app proc_vmstat:file open;
+#allow untrusted_app hal_memtrack_hwservice:hwservice_manager find;
+#allow untrusted_app proc:file read;
+#allow untrusted_app kernel:file { read open };
 
 #============= untrusted_app_25 ==============
 #allow untrusted_app_25 method_trace_data_file:file { execute read unlink };
@@ -69,9 +78,7 @@ allow init sysfs:file { open read write };
 
 #============= gps-daemon==============
 #allow glgps vendor_file:file { entrypoint };
-
-#============= sec_keyboard==============
-#allow sec_keyboard vendor_file:file { entrypoint };
+#allow glgps system_data_file:file { write };
 
 #============= macloader==============
 #allow macloader vendor_file:file entrypoint;
@@ -81,4 +88,8 @@ allow init sysfs:file { open read write };
 #allow hal_wifi_default system_data_file:file { write };
 #allow hal_wifi_default self:packet_socket { ioctl };
 
+#============= rild==============
+#allow rild system_data_file:file { create append setattr write };
 
+#============= fsck==============
+#allow fsck fsck:capability { dac_override dac_read_search };
