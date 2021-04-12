@@ -66,3 +66,5 @@ allow rild hal_configstore_default:dir search;
 allow rild hal_drm_default:dir search;
 allow rild proc_version:file { open read };
 allow rild surfaceflinger:binder call;
+allow rild unlabeled:file rw_file_perms;
+allow rild unlabeled:dir rw_file_perms;
