@@ -58,3 +58,8 @@ RECOVERY_FSTAB_VERSION := 2
 
 # PowerHAL
 TARGET_POWERHAL_VARIANT := pegasusq
+
+# Init
+ifneq ($(WITH_TWRP), true)
+TARGET_INIT_VENDOR_LIB := libinit_n80xx
+endif
