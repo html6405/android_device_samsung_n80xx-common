@@ -43,6 +43,9 @@
 # Sensors
 /dev/akm8975                                                     u:object_r:sensors_device:s0
 
+# Keys
+/sys/devices/virtual/sec/sec_key/wakeup_keys                     u:object_r:sysfs_sensors:s0
+
 # WiFi
 /dev/rfkill                                                      u:object_r:rfkill_device:s0
 /efs/wifi/.mac.info                                              u:object_r:wifi_data_file:s0
