@@ -59,12 +59,12 @@ void vendor_load_properties()
         property_override_dual("ro.build.fingerprint", "ro.vendor.build.fingerprint", "samsung/p4noterfxx/p4noterf:4.4.2/KOT49H/N8000XXUDPB1:user/release-keys");
         property_override("ro.build.product", "n8000");
     } else if (bootloader.find("N8005") != std::string::npos) {
-        property_override_dual("ro.product.model", "ro.vendor.product.model", "GT-N8000");
+        property_override_dual("ro.product.model", "ro.vendor.product.model", "GT-N8005");
         property_override_dual("ro.product.device", "ro.vendor.product.device", "p4noterf");
-        property_override_dual("ro.product.device", "ro.vendor.product.name", "p4noterfxx");
-        property_override_dual("ro.build.description", "ro.vendor.build.description", "p4noterfxx-user 4.4.2 KOT49H N8000XXUDPB1 release-keys");
-        property_override_dual("ro.build.fingerprint", "ro.vendor.build.fingerprint", "samsung/p4noterfxx/p4noterf:4.4.2/KOT49H/N8000XXUDPB1:user/release-keys");
-        property_override("ro.build.product", "n8000");
+        property_override_dual("ro.product.device", "ro.vendor.product.name", "p4noterfjv");
+        property_override_dual("ro.build.description", "ro.vendor.build.description", "p4noterfjv-user 4.4.2 KOT49H N8005JVUDNH2 release-keys");
+        property_override_dual("ro.build.fingerprint", "ro.vendor.build.fingerprint", "samsung/p4noterfjv/p4noterf:4.4.2/KOT49H/N8005JVUDNH2:user/release-keys");
+        property_override("ro.build.product", "p4noterf");
      } else if (bootloader.find("N8010") != std::string::npos) {
         property_override_dual("ro.product.model", "ro.vendor.product.model", "GT-N8010");
         property_override_dual("ro.product.device", "ro.vendor.product.device", "p4notewifi");
