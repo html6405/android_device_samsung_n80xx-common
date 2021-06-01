@@ -16,9 +16,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="updater_server_url" translatable="false">http://html6405.ddns.net/{device}/html6405/LOS16.xml</string>
+    <string name="updater_server_url" translatable="false">http://html6405.ddns.net/{device}/html6405/e-16.xml</string>
 
-    <string name="menu_changelog_url" translatable="false">https://forum.xda-developers.com/t/lineageos-16-0-android-9-for-gt-n8000-gt-n8010-gt-n8013-gt-n8020.4182187/post-83795341</string>
+    <string name="menu_changelog_url" translatable="false">https://forum.xda-developers.com/t/rom-9-0-n8000-n801x-n8020-unofficial-e.4201929/post-84092505</string>
 
 </resources>
 
