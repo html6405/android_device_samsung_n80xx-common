@@ -37,13 +37,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/tiny_hw.xml:system/etc/sound/n80xx
 
-
-# prebuild apps
-
-PRODUCT_PACKAGES += \
-	OpenCamera \
-	Via
-
 # sec_keyboard
 PRODUCT_PACKAGES += \
 	sec_keyboard \
