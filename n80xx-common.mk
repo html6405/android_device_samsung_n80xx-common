@@ -127,4 +127,4 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 
-$(call inherit-product-if-exists, vendor/samsung/n80xx/n80xx-vendor.mk)
+$(call inherit-product-if-exists, vendor/samsung/n80xx-treble/n80xx-vendor.mk)
