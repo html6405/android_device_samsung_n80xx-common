@@ -15,9 +15,6 @@
 #
 include device/samsung/smdk4412-common/BoardCommonConfig.mk
 
-WITHOUT_CAMERA2 := true
-WITHOUT_GCAM := true
-
 # Wifi
 WIFI_DRIVER_MODULE_PATH :=
 
