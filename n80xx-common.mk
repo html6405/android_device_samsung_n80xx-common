@@ -62,7 +62,7 @@ PRODUCT_PACKAGES += \
 ifneq ($(TARGET_PRODUCT),lineage_n8020)
 # Gps
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/gps.xml:system/vendor/etc/gps.xml
+    $(LOCAL_PATH)/configs/gps.xml:vendor/etc/gps.xml
 
 PRODUCT_PACKAGES += \
 	gps.smdk4x12 \
