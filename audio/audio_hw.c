@@ -2941,7 +2941,7 @@ static int adev_config_parse(struct m0_audio_device *adev)
     bool eof = false;
     int len;
 
-    snprintf(file, sizeof(file), "/system/etc/sound/%s", "n80xx");
+    snprintf(file, sizeof(file), "/vendor/etc/sound/%s", "n80xx");
 
     ALOGV("Reading configuration from %s\n", file);
     f = fopen(file, "r");

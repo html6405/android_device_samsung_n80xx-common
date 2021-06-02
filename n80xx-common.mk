@@ -33,7 +33,7 @@ PRODUCT_COPY_FILES += \
 # Audio
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    $(LOCAL_PATH)/configs/tiny_hw.xml:system/etc/sound/n80xx
+    $(LOCAL_PATH)/configs/tiny_hw.xml:vendor/etc/sound/n80xx
 
 
 # prebuild apps
