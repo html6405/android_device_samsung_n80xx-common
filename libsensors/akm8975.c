@@ -21,7 +21,7 @@
 #include <stdint.h>
 #include <fcntl.h>
 #include <errno.h>
-
+#include <pthread.h>
 #include <hardware/sensors.h>
 #include <hardware/hardware.h>
 
