@@ -104,6 +104,7 @@ void vendor_load_properties()
         property_override_dual("ro.build.description", "ro.vendor.build.description", "p4notewifixx-user 4.4.2 KOT49H N8010XXUDNE4 release-keys");
         property_override_dual("ro.build.fingerprint", "ro.vendor.build.fingerprint", "samsung/p4notewifixx/p4notewifiww:4.4.2/KOT49H/N8010XXUDNE4:user/release-keys");
         property_override("ro.build.product", "n8010");
+        property_override("ro.radio.noril", "yes");
     } else if (bootloader.find("N8013") != std::string::npos) {
         property_override_dual("ro.product.model", "ro.vendor.product.model", "GT-N8013");
         property_override_dual("ro.product.device", "ro.vendor.product.device", "p4notewifi");
@@ -111,6 +112,7 @@ void vendor_load_properties()
         property_override_dual("ro.build.description", "ro.vendor.build.description", "p4notewifiue-user 4.1.2 JZO54K N8013UEUCOI1 release-keys");
         property_override_dual("ro.build.fingerprint", "ro.vendor.build.fingerprint", "samsung/p4notewifiue/p4notewifi:4.1.2/JZO54K/N8013UEUCOI1:user/release-keys");
         property_override("ro.build.product", "n8013");
+        property_override("ro.radio.noril", "yes");
     } else if (bootloader.find("N8020") != std::string::npos) {
         property_override_dual("ro.product.model", "ro.vendor.product.model", "GT-N8020");
         property_override_dual("ro.product.device", "ro.vendor.product.device", "p4notelte");
