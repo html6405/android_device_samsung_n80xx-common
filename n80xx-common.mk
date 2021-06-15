@@ -117,7 +117,7 @@ PRODUCT_COPY_FILES += \
 
 # UMS
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/ums_init.sh:system/bin/ums_init.sh
+    $(LOCAL_PATH)/configs/ums_init.sh:vendor/bin/ums_init.sh
 
 # Set product characteristic to tablet, needed for some ui elements
 PRODUCT_CHARACTERISTICS := tablet
