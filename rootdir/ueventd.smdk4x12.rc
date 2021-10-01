@@ -44,5 +44,5 @@
 /dev/hsic*                0666   system     radio
 /dev/usb/lp*              0660   system     usb
 /dev/ttyGS0               0660   system     system
-
+/dev/alarm                0664   system     radio
 /dev/ttySAC*	          0660	 root	    system
