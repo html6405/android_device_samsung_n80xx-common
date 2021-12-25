@@ -89,7 +89,7 @@ void vendor_load_properties()
         property_override_dual("ro.build.description", "ro.vendor.build.description", "p4noterfxx-user 4.4.2 KOT49H N8000XXUDPB1 release-keys");
         property_override_dual("ro.build.fingerprint", "ro.vendor.build.fingerprint", "samsung/p4noterfxx/p4noterf:4.4.2/KOT49H/N8000XXUDPB1:user/release-keys");
         property_override("ro.build.product", "n8000");
-        property_override("rild.libargs", "-d /dev/ttyS0");
+        property_override("vendor.rild.libargs", "-d /dev/ttyS0");
     } else if (bootloader.find("N8005") != std::string::npos) {
         property_override_dual("ro.product.model", "ro.vendor.product.model", "GT-N8005");
         property_override_dual("ro.product.device", "ro.vendor.product.device", "p4noterf");
