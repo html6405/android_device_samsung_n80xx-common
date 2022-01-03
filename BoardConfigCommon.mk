@@ -17,9 +17,6 @@ include device/samsung/smdk4412-common/BoardCommonConfig.mk
 
 DEVICE_PATH := device/samsung/n80xx-common
 
-WITHOUT_CAMERA2 := true
-WITHOUT_GCAM := true
-
 # Wifi
 WIFI_DRIVER_MODULE_PATH :=
 
