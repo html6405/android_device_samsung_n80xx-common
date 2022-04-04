@@ -1,0 +1,12 @@
+on property:debug.tracing.screen_state=1
+    stop vendor.sec_keyboard
+    start vendor.keyboard_kill
+
+on property:debug.tracing.screen_state=2
+    start vendor.sec_keyboard
+
+service vendor.keyboard_kill /vendor/bin/sec_keyboard_kill.sh
+    class main
+    oneshot
+    disabled
+	  seclabel u:r:sec_keyboard:s0
