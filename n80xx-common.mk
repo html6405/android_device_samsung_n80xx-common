@@ -71,8 +71,6 @@ endif
 
 # Product specific Packages
 PRODUCT_PACKAGES += \
-    libsecril-client \
-    libsecril-client-sap \
     SamsungServiceMode \
     tinyplay
 
