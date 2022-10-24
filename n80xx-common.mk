@@ -51,12 +51,7 @@ PRODUCT_PACKAGES +=  libstlport
 
 # Sensors
 PRODUCT_PACKAGES += \
-    sensors.smdk4x12 \
-    lightsensor.smdk4x12
-
-# Power
-PRODUCT_PACKAGES += \
-    power.smdk4x12
+    sensors.smdk4x12
 
 ifneq ($(TARGET_PRODUCT),lineage_n8020)
 # Gps
@@ -88,9 +83,7 @@ PRODUCT_COPY_FILES += \
 
 # f2fs
 PRODUCT_PACKAGES += \
-	fibmap.f2fs \
-	fsck.f2fs \
-	mkfs.f2fs
+	fsck.f2fs
 
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \
