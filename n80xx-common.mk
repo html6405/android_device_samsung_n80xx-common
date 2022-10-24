@@ -71,7 +71,6 @@ endif
 
 # Product specific Packages
 PRODUCT_PACKAGES += \
-    SamsungServiceMode \
     tinyplay
 
 # Camera
