@@ -38,6 +38,10 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
     $(LOCAL_PATH)/configs/tiny_hw.xml:vendor/etc/sound/n80xx
 
+# Media
+PRODUCT_COPY_FILES += \
+	$(LOCAL_PATH)/configs/media_codecs_tablet.xml:vendor/etc/media_codecs.xml
+
 # sec_keyboard
 PRODUCT_PACKAGES += \
 	sec_keyboard \
