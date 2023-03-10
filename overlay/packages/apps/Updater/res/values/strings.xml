@@ -16,7 +16,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="updater_server_url" translatable="false">http://html6405.ddns.net/{device}/html6405/LOS20/{device}.json</string>
+    <string name="updater_server_url" translatable="false">http://ota.html6405.com/{device}/LOS20/{device}.json</string>
 
     <string name="menu_changelog_url" translatable="false">https://forum.xda-developers.com/t/lineageos-20-0-android-13-for-gt-n8000-gt-n8005-gt-n8010-gt-n8013-gt-n8020-alpha.4513717/post-87667285</string>
 
