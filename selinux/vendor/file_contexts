@@ -73,6 +73,7 @@
 /system/bin/tinyplay                                             u:object_r:tinyplay_exec:s0
 /vendor/bin/glgps                                         u:object_r:glgps_exec:s0
 /vendor/bin/restart_rild.sh                               u:object_r:radioreset_exec:s0
+/vendor/bin/tweaks.sh                               u:object_r:tweaks_exec:s0
 /vendor/bin/param.sh                                      u:object_r:param_exec:s0
 /vendor/bin/sec_keyboard                                  u:object_r:sec_keyboard_exec:s0
 /vendor/bin/sec_keyboard_kill.sh                                  u:object_r:sec_keyboard_exec:s0
