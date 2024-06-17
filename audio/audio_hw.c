@@ -24,7 +24,6 @@
 #include <errno.h>
 #include <pthread.h>
 #include <stdint.h>
-#include <android/api-level.h>
 #include <sys/time.h>
 #include <stdlib.h>
 #include <expat.h>
