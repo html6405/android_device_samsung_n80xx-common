@@ -1,0 +1,3 @@
+diff --git a/overlay/packages/apps/Updater/res/values/strings.xml b/overlay/packages/apps/Updater/app/src/main/res/values/strings.xml
+rename from overlay/packages/apps/Updater/res/values/strings.xml
+rename to overlay/packages/apps/Updater/app/src/main/res/values/strings.xml
