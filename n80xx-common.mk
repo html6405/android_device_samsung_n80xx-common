@@ -101,9 +101,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:vendor/etc/permissions/android.hardware.telephony.gsm.xml \
     frameworks/native/data/etc/tablet_core_hardware.xml:vendor/etc/permissions/tablet_core_hardware.xml
 
-# UMS
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/ums_init.sh:vendor/bin/ums_init.sh
 
 # Set product characteristic to tablet, needed for some ui elements
 PRODUCT_CHARACTERISTICS := tablet
