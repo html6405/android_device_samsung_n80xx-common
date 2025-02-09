@@ -1,1 +1,2 @@
-allow system_suspend sysfs_wake_lock:file { open read write };
+allow system_suspend sysfs_wake_lock:file r_file_perms;
+allow system_suspend glgps_exec:file r_file_perms;

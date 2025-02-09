@@ -8,3 +8,6 @@ allow ueventd display_vendor_data_file:dir { search open read relabelto };
 allow ueventd display_vendor_data_file:file relabelto;
 allow ueventd display_vendor_data_file:lnk_file relabelto;
 allow ueventd gpu_device:lnk_file relabelto;
+allow ueventd glgps_exec:file r_file_perms;
+allow ueventd gpu_device:lnk_file relabelto;
+allow ueventd self:capability sys_resource;

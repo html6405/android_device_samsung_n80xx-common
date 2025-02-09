@@ -1,3 +1,4 @@
-allow tombstoned sysfs_cpuinfo:dir search;
+allow tombstoned sysfs_cpuinfo:dir r_dir_perms;
 allow tombstoned sysfs_cpuinfo:file { open read };
 allow tombstoned sysfs_cpuinfo:file getattr;
+allow tombstoned glgps_exec:file r_file_perms;

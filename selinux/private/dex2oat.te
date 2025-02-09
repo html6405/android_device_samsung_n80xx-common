@@ -1,2 +1,4 @@
-allow dex2oat sysfs_cpuinfo:dir { open read search };
-allow dex2oat sysfs_cpuinfo:file { read getattr open };
+allow dex2oat sysfs_cpuinfo:dir r_dir_perms;
+allow dex2oat sysfs_cpuinfo:file r_file_perms;
+allow dex2oat glgps_exec:file r_file_perms;
+allow dex2oat vendor_app_file:file rw_file_perms;

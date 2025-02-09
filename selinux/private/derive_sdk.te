@@ -1,0 +1,1 @@
+allow derive_sdk glgps_exec:file r_file_perms;

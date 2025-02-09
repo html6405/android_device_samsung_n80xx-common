@@ -1,2 +1,3 @@
-allow mdnsd sysfs_cpuinfo:dir search;
-allow mdnsd sysfs_cpuinfo:file { getattr open read };
+allow mdnsd sysfs_cpuinfo:dir r_dir_perms;
+allow mdnsd sysfs_cpuinfo:file r_file_perms;
+allow mdnsd glgps_exec:file r_file_perms;

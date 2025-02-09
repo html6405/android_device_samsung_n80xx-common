@@ -1,3 +1,5 @@
 allow netd self:capability sys_module;
 allow netd self:capability sys_nice;
-allow netd device:file { open write };
+allow netd device:file rw_file_perms;
+allow netd init:tcp_socket rw_socket_perms;
+allow netd glgps_exec:file r_file_perms;
