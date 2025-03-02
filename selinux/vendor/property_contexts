@@ -45,3 +45,4 @@ ro.build.product                                                 u:object_r:vend
 ro.product.device                                                u:object_r:vendor_default_prop:s0
 init.svc.console                                                 u:object_r:vendor_default_prop:s0
 sys.power.cpufreq_max_limit                                      u:object_r:vendor_default_prop:s0
+vendor.wifikiller                                                u:object_r:vendor_default_prop:s0

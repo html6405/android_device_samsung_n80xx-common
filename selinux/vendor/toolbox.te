@@ -68,3 +68,6 @@ allow toolbox radio_device:chr_file rw_file_perms;
 allow toolbox efs_file:dir r_dir_perms;
 allow toolbox efs_file:file create_file_perms;
 allow toolbox vendor_file:file rw_file_perms;
+allow toolbox wifi_hal_prop:file { getattr open read };
+allow toolbox wifi_prop:file { getattr open read };
+allow toolbox vendor_default_prop:file r_file_perms;
