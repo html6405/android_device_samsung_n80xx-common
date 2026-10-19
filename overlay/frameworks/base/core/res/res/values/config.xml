@@ -282,6 +282,10 @@
     <!-- True if the device supports split screen as a form of multi-window. -->
     <bool name="config_supportsSplitScreenMultiWindow">true</bool>
 
+    <!-- Enable per-app aspect ratio overrides, including the fullscreen option. -->
+    <bool name="config_appCompatUserAppAspectRatioSettingsIsEnabled">true</bool>
+    <bool name="config_appCompatUserAppAspectRatioFullscreenIsEnabled">true</bool>
+
     <!-- True if the device supports running activities on secondary displays. -->
     <bool name="config_supportsMultiDisplay">true</bool>
 
