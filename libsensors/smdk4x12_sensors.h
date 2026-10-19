@@ -17,6 +17,7 @@
 
 #include <stdint.h>
 #include <poll.h>
+#include <pthread.h>
 #include <linux/input.h>
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
@@ -61,6 +62,9 @@ struct smdk4x12_sensors_device {
 
 	struct pollfd *poll_fds;
 	int poll_fds_count;
+	int wake_fd;
+	pthread_mutex_t flush_lock;
+	unsigned int *flush_pending;
 };
 
 extern struct smdk4x12_sensors_handlers *smdk4x12_sensors_handlers[];
