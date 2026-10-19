@@ -72,10 +72,6 @@ endif
 PRODUCT_PACKAGES += \
     tinyplay
 
-# Camera
-PRODUCT_PACKAGES += \
-    camera.smdk4x12
-
 # ConsumerIR
 PRODUCT_PACKAGES += \
     consumerir.exynos4 \
