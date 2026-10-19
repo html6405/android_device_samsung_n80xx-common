@@ -1,0 +1,2 @@
+#dt2w
+genfscon sysfs /devices/virtual/sec/tsp/dt2w_enable u:object_r:sysfs_dt2w:s0
