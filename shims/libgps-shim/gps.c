@@ -256,7 +256,32 @@ static void shim_sv_status_cb(GpsSvStatus* sv_info) {
 }
 
 static void shim_nmea_cb(GpsUtcTime timestamp, const char* nmea, int length) {
-    orgGpsCallbacks->nmea_cb(timestamp, nmea, length);
+    if (orgGpsCallbacks == NULL || orgGpsCallbacks->nmea_cb == NULL) {
+        ALOGE("%s: framework callback is unavailable", __func__);
+        return;
+    }
+    if (nmea == NULL || length <= 0 || length > 4096) {
+        ALOGE("%s: rejecting invalid NMEA buffer %p length %d",
+            __func__, nmea, length);
+        return;
+    }
+
+    /*
+     * Broadcom's legacy HAL reports an explicit byte count but does not
+     * guarantee nmea[length] is NUL. The HIDL 1.0 wrapper uses
+     * hidl_string::setToExternal(nmea, length), which requires exactly that
+     * trailing byte and aborts the GNSS service otherwise. Supply a bounded,
+     * owned copy for the duration of the synchronous callback.
+     */
+    char *terminatedNmea = (char *)malloc((size_t)length + 1);
+    if (terminatedNmea == NULL) {
+        ALOGE("%s: failed to allocate %d-byte NMEA copy", __func__, length + 1);
+        return;
+    }
+    memcpy(terminatedNmea, nmea, (size_t)length);
+    terminatedNmea[length] = '\0';
+    orgGpsCallbacks->nmea_cb(timestamp, terminatedNmea, length);
+    free(terminatedNmea);
 }
 
 static void shim_set_capabilities_cb(uint32_t capabilities) {
