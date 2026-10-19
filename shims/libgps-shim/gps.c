@@ -103,6 +103,9 @@ static pthread_t (* vendor_agpsril_cb_create_thread_cb)(const char* name, void (
 
 static AGpsRilCallbacks *orgAGpsRilCallbacks = NULL;
 static AGpsRilCallbacks shimmed_callbacks;
+static AGpsRilInterface shimmedAgpsRilInterface;
+static AGpsCallbacks shimmedAgpsCallbacks;
+static AGpsInterface shimmedAgpsInterface;
 static GpsCallbacks *orgGpsCallbacks = NULL;
 static GpsSvStatus gpsSvStatus_info;
 
@@ -308,30 +311,43 @@ static void shim_request_utc_time_cb() {
 /* AGPS-RIL shimmed methods */
 static void shim_agpsril_cb_request_setid(uint32_t flags) {
     ALOGD("%s: called", __func__);
-    vendor_agpsril_cb_request_setid(flags);
+    if (vendor_agpsril_cb_request_setid != NULL)
+        vendor_agpsril_cb_request_setid(flags);
 }
 
 static void shim_agpsril_cb_request_refloc(uint32_t flags) {
     ALOGD("%s: called", __func__);
-    vendor_agpsril_cb_request_refloc(flags);
+    if (vendor_agpsril_cb_request_refloc != NULL)
+        vendor_agpsril_cb_request_refloc(flags);
 }
 
 static pthread_t shim_agpsril_cb_create_thread_cb(const char* name, void (*start)(void *), void* arg) {
     ALOGD("%s: called", __func__);
+    if (vendor_agpsril_cb_create_thread_cb == NULL)
+        return (pthread_t)0;
     return vendor_agpsril_cb_create_thread_cb(name, start, arg);
 }
 
 static void shim_agpsril_init(AGpsRilCallbacks* callbacks) {
     ALOGD("%s: called", __func__);
 
+    if (callbacks == NULL || vendor_agpsril_init == NULL) {
+        ALOGE("%s: invalid callbacks or vendor init", __func__);
+        return;
+    }
+
     orgAGpsRilCallbacks = callbacks;
     vendor_agpsril_cb_request_setid = orgAGpsRilCallbacks->request_setid;
     vendor_agpsril_cb_request_refloc = orgAGpsRilCallbacks->request_refloc;
     vendor_agpsril_cb_create_thread_cb = orgAGpsRilCallbacks->create_thread_cb;
 
-    shimmed_callbacks.request_setid = shim_agpsril_cb_request_setid;
-    shimmed_callbacks.request_refloc = shim_agpsril_cb_request_refloc;
-    shimmed_callbacks.create_thread_cb = shim_agpsril_cb_create_thread_cb;
+    shimmed_callbacks = *callbacks;
+    if (callbacks->request_setid != NULL)
+        shimmed_callbacks.request_setid = shim_agpsril_cb_request_setid;
+    if (callbacks->request_refloc != NULL)
+        shimmed_callbacks.request_refloc = shim_agpsril_cb_request_refloc;
+    if (callbacks->create_thread_cb != NULL)
+        shimmed_callbacks.create_thread_cb = shim_agpsril_cb_create_thread_cb;
 
     ALOGD("%s: vendor: setid:%p refloc:%p create_thread_cb:%p",
         __func__,
@@ -342,47 +358,48 @@ static void shim_agpsril_init(AGpsRilCallbacks* callbacks) {
     vendor_agpsril_init(&shimmed_callbacks);
 }
 
-static void shim_agpsril_set_ref_location(AGpsRefLocation *agps_reflocation, size_t sz_struct) {
+static void shim_agpsril_set_ref_location(const AGpsRefLocation *agps_reflocation, size_t sz_struct) {
 	AGpsRefLocation_vendor vendor_ref;
-	if (sizeof(AGpsRefLocation_vendor) > sz_struct) {
+	if (agps_reflocation == NULL || vendor_agpsril_set_ref_location == NULL ||
+			sz_struct < sizeof(AGpsRefLocation)) {
 		ALOGE("%s: AGpsRefLocation is too small, bailing out!", __func__);
 		return;
 	}
+	memset(&vendor_ref, 0, sizeof(vendor_ref));
 	ALOGD("%s: shimming AGpsRefLocation", __func__);
-	ALOGD("%s: AGpsRefLocation (%d) | AGpsRefLocation_vendor(%d)", __func__, sizeof(AGpsRefLocation), sizeof(AGpsRefLocation_vendor));
+	ALOGD("%s: AGpsRefLocation (%zu) | AGpsRefLocation_vendor(%zu)",
+		__func__, sizeof(AGpsRefLocation), sizeof(AGpsRefLocation_vendor));
 	vendor_ref.type = agps_reflocation->type;
-	vendor_ref.u.cellID.type = agps_reflocation->u.cellID.type;
-	vendor_ref.u.cellID.mcc = agps_reflocation->u.cellID.mcc;
-	vendor_ref.u.cellID.mnc = agps_reflocation->u.cellID.mnc;
-	vendor_ref.u.cellID.lac = agps_reflocation->u.cellID.lac;
-	vendor_ref.u.cellID.cid = agps_reflocation->u.cellID.cid;
-	vendor_ref.u.mac = agps_reflocation->u.mac;
-	ALOGD("%s: Executing vendor_agpsril_set_ref_vendor_reflocation= > type:%d mcc:%d mnc:%d lac:%d cid:%d",
-		__func__,
-		vendor_ref.u.cellID.type,
-		vendor_ref.u.cellID.mcc,
-		vendor_ref.u.cellID.mnc,
-		vendor_ref.u.cellID.lac,
-		vendor_ref.u.cellID.cid);
+	if (agps_reflocation->type == AGPS_REG_LOCATION_TYPE_MAC) {
+		vendor_ref.u.mac = agps_reflocation->u.mac;
+	} else {
+		vendor_ref.u.cellID.type = agps_reflocation->u.cellID.type;
+		vendor_ref.u.cellID.mcc = agps_reflocation->u.cellID.mcc;
+		vendor_ref.u.cellID.mnc = agps_reflocation->u.cellID.mnc;
+		vendor_ref.u.cellID.lac = agps_reflocation->u.cellID.lac;
+		vendor_ref.u.cellID.cid = agps_reflocation->u.cellID.cid;
+		ALOGD("%s: cell type:%d mcc:%d mnc:%d lac:%d cid:%d",
+			__func__,
+			vendor_ref.u.cellID.type,
+			vendor_ref.u.cellID.mcc,
+			vendor_ref.u.cellID.mnc,
+			vendor_ref.u.cellID.lac,
+			vendor_ref.u.cellID.cid);
+	}
 	vendor_agpsril_set_ref_location(&vendor_ref, sizeof(AGpsRefLocation_vendor));
-
-	agps_reflocation->type = vendor_ref.type;
-	agps_reflocation->u.cellID.type = vendor_ref.u.cellID.type;
-	agps_reflocation->u.cellID.mcc = vendor_ref.u.cellID.mcc;
-	agps_reflocation->u.cellID.mnc = vendor_ref.u.cellID.mnc;
-	agps_reflocation->u.cellID.lac = vendor_ref.u.cellID.lac;
-	agps_reflocation->u.cellID.cid = vendor_ref.u.cellID.cid;
-	agps_reflocation->u.mac = vendor_ref.u.mac;
 }
 
 static void shim_agpsril_set_set_id(AGpsSetIDType type, const char* setid) {
-    ALOGD("%s: type:%d setid:%s", __func__, type, setid);
-    vendor_agpsril_set_set_id(type, setid);
+    ALOGD("%s: type:%d setid:%s", __func__, type,
+        setid != NULL ? setid : "");
+    if (vendor_agpsril_set_set_id != NULL)
+        vendor_agpsril_set_set_id(type, setid);
 }
 
 static void shim_agpsril_ni_message(uint8_t *msg, size_t len) {
-    ALOGD("%s: msg:%d len:%d", __func__, *msg, len);
-    vendor_agpsril_ni_message(msg, len);
+    ALOGD("%s: len:%zu", __func__, len);
+    if (vendor_agpsril_ni_message != NULL)
+        vendor_agpsril_ni_message(msg, len);
 }
 
 static void shim_agpsril_update_network_state(int connected, int type, int roaming, const char* extra_info) {
@@ -391,43 +408,60 @@ static void shim_agpsril_update_network_state(int connected, int type, int roami
         connected,
         type,
         roaming,
-        extra_info);
+        extra_info != NULL ? extra_info : "");
 
-    vendor_agpsril_update_network_state(connected, type, roaming, extra_info);
+    if (vendor_agpsril_update_network_state != NULL)
+        vendor_agpsril_update_network_state(connected, type, roaming, extra_info);
 }
 
 static void shim_agpsril_update_network_availability(int avaiable, const char* apn) {
     ALOGD("%s: avaiable:%d apn:%s",
         __func__,
         avaiable,
-        apn);
-    vendor_agpsril_update_network_availability(avaiable, apn);
+        apn != NULL ? apn : "");
+    if (vendor_agpsril_update_network_availability != NULL)
+        vendor_agpsril_update_network_availability(avaiable, apn);
 }
 
 static AGpsInterface *aGpsInterface = NULL;
 
 static void shim_agps_status_callback(AGpsStatus* status) {
+	if (status == NULL) {
+		ALOGE("%s: null status", __func__);
+		return;
+	}
 	ALOGD("%s: type:%d status:%d ipaddr:%x", __func__,
 		status->type,
 		status->status,
 		status->ipaddr);
-	vendor_agps_status_callback(status);
+	if (vendor_agps_status_callback != NULL)
+		vendor_agps_status_callback(status);
 }
 
 static void shim_agps_init(AGpsCallbacks* callbacks) {
 	ALOGD("%s: shimming AGpsCallbacks", __func__);
+	if (callbacks == NULL || vendor_agps_init == NULL) {
+		ALOGE("%s: invalid callbacks or vendor init", __func__);
+		return;
+	}
 	vendor_agps_status_callback = callbacks->status_cb;
-	callbacks->status_cb = shim_agps_status_callback;
+	shimmedAgpsCallbacks = *callbacks;
+	shimmedAgpsCallbacks.status_cb = shim_agps_status_callback;
+	vendor_agps_init(&shimmedAgpsCallbacks);
 }
 
 static int shim_agps_data_conn_open(const char* apn) {
 	ALOGD("%s: apn:%s", __func__, apn);
+	if (vendor_agps_data_conn_open == NULL)
+		return -ENOSYS;
 	int result = vendor_agps_data_conn_open(apn);
 	ALOGD("%s: result:%d", __func__, result);
 	return result;
 }
 static int shim_agps_data_conn_closed() {
 	ALOGD("%s:", __func__);
+	if (vendor_agps_data_conn_closed == NULL)
+		return -ENOSYS;
 	int result = vendor_agps_data_conn_closed();
 	ALOGD("%s: result:%d", __func__, result);
 	return result;
@@ -435,6 +469,8 @@ static int shim_agps_data_conn_closed() {
 
 static int shim_agps_data_conn_failed() {
 	ALOGD("%s:", __func__);
+	if (vendor_agps_data_conn_failed == NULL)
+		return -ENOSYS;
 	int result = vendor_agps_data_conn_failed();
 	ALOGD("%s: result:%d", __func__, result);
 	return result;
@@ -443,6 +479,8 @@ static int shim_agps_data_conn_failed() {
 static int shim_agps_set_server(AGpsType type, const char* hostname, int port) {
 	ALOGD("%s: type:%d hostname:%s port:%d", __func__,
 		type, hostname, port);
+	if (vendor_agps_set_server == NULL)
+		return -ENOSYS;
 	int result = vendor_agps_set_server(type, hostname, port);
 	ALOGD("%s: result:%d", __func__, result);
 	return result;
@@ -453,7 +491,16 @@ static int shim_agps_data_conn_open_with_apn_ip_type(
             ApnIpType apnIpType) {
 	ALOGD("%s: apn:%s apnIpType:%d", __func__,
 		apn, apnIpType);
-	int result = vendor_agps_data_conn_open_with_apn_ip_type(apn, apnIpType);
+	int result;
+	if (vendor_agps_data_conn_open_with_apn_ip_type != NULL) {
+		result = vendor_agps_data_conn_open_with_apn_ip_type(apn, apnIpType);
+	} else if (vendor_agps_data_conn_open != NULL) {
+		/* Android 4.x Broadcom HALs only implement the legacy APN method. */
+		result = vendor_agps_data_conn_open(apn);
+	} else {
+		ALOGE("%s: vendor has no AGPS data connection method", __func__);
+		return -ENOSYS;
+	}
 	ALOGD("%s: result:%d", __func__, result);
 	return result;
 }
@@ -516,63 +563,77 @@ static int shim_gps_set_position_mode(GpsPositionMode mode, GpsPositionRecurrenc
 static void* shim_gps_get_extension(const char* name) {
 	ALOGD("%s(%s)", __func__, name);
 	if (strcmp(name, AGPS_RIL_INTERFACE) == 0) {
-		if (aGpsInterface == NULL) {
-			ALOGD("%s(%s): Get extension '%s' first before handling '%s'",
-				__func__,
-				name,
-				AGPS_INTERFACE,
-				AGPS_RIL_INTERFACE
-				);
-			aGpsInterface = (AGpsInterface*)vendor_gps_get_extension(name);
-		}
-
 		ALOGD("%s: shimming AGPS-RIL init", __func__);
 
-		// RIL interface
-		AGpsRilInterface *aGpsRil = (AGpsRilInterface*)vendor_gps_get_extension(name);
+		AGpsRilInterface *aGpsRil =
+				(AGpsRilInterface*)vendor_gps_get_extension(name);
+		if (aGpsRil == NULL || aGpsRil->size < sizeof(size_t)) {
+			ALOGE("%s: vendor AGPS-RIL interface is unavailable", __func__);
+			return NULL;
+		}
 
-		vendor_agpsril_init = aGpsRil->init;
-		aGpsRil->init = shim_agpsril_init;
+		/* Never modify the blob's table: get_extension may be called repeatedly. */
+		memset(&shimmedAgpsRilInterface, 0, sizeof(shimmedAgpsRilInterface));
+		size_t vendorSize = aGpsRil->size;
+		if (vendorSize > sizeof(shimmedAgpsRilInterface))
+			vendorSize = sizeof(shimmedAgpsRilInterface);
+		memcpy(&shimmedAgpsRilInterface, aGpsRil, vendorSize);
 
-		vendor_agpsril_set_ref_location = aGpsRil->set_ref_location;
-		aGpsRil->set_ref_location = shim_agpsril_set_ref_location;
+		vendor_agpsril_init = shimmedAgpsRilInterface.init;
+		vendor_agpsril_set_ref_location =
+				shimmedAgpsRilInterface.set_ref_location;
+		vendor_agpsril_set_set_id = shimmedAgpsRilInterface.set_set_id;
+		vendor_agpsril_ni_message = shimmedAgpsRilInterface.ni_message;
+		vendor_agpsril_update_network_state =
+				shimmedAgpsRilInterface.update_network_state;
+		vendor_agpsril_update_network_availability =
+				shimmedAgpsRilInterface.update_network_availability;
 
-		vendor_agpsril_set_set_id = aGpsRil->set_set_id;
-		aGpsRil->set_set_id = shim_agpsril_set_set_id;
+		shimmedAgpsRilInterface.size = sizeof(shimmedAgpsRilInterface);
+		shimmedAgpsRilInterface.init = shim_agpsril_init;
+		shimmedAgpsRilInterface.set_ref_location =
+				shim_agpsril_set_ref_location;
+		shimmedAgpsRilInterface.set_set_id = shim_agpsril_set_set_id;
+		shimmedAgpsRilInterface.ni_message = shim_agpsril_ni_message;
+		shimmedAgpsRilInterface.update_network_state =
+				shim_agpsril_update_network_state;
+		shimmedAgpsRilInterface.update_network_availability =
+				shim_agpsril_update_network_availability;
 
-		vendor_agpsril_ni_message = aGpsRil->ni_message;
-		aGpsRil->ni_message = shim_agpsril_ni_message;
-
-		vendor_agpsril_update_network_state = aGpsRil->update_network_state;
-		aGpsRil->update_network_state = shim_agpsril_update_network_state;
-
-		vendor_agpsril_update_network_availability = aGpsRil->update_network_availability;
-		aGpsRil->update_network_availability = shim_agpsril_update_network_availability;
-
-		return aGpsRil;
+		return &shimmedAgpsRilInterface;
 	} else if (strcmp(name, AGPS_INTERFACE) == 0) {
 		ALOGD("%s: shimming AGPS", __func__);
 
-		// AGPS_RIL interface
 		aGpsInterface = (AGpsInterface*)vendor_gps_get_extension(name);
-		vendor_agps_init = aGpsInterface->init;
-		aGpsInterface->init = shim_agps_init;
+		if (aGpsInterface == NULL || aGpsInterface->size < sizeof(size_t)) {
+			ALOGE("%s: vendor AGPS interface is unavailable", __func__);
+			return NULL;
+		}
 
-		vendor_agps_data_conn_open = aGpsInterface->data_conn_open;
-		aGpsInterface->data_conn_open = shim_agps_data_conn_open;
+		/* Copy the legacy table instead of writing beyond a short vendor struct. */
+		memset(&shimmedAgpsInterface, 0, sizeof(shimmedAgpsInterface));
+		size_t vendorSize = aGpsInterface->size;
+		if (vendorSize > sizeof(shimmedAgpsInterface))
+			vendorSize = sizeof(shimmedAgpsInterface);
+		memcpy(&shimmedAgpsInterface, aGpsInterface, vendorSize);
 
-		vendor_agps_data_conn_closed = aGpsInterface->data_conn_closed;
-		aGpsInterface->data_conn_closed = shim_agps_data_conn_closed;
+		vendor_agps_init = shimmedAgpsInterface.init;
+		vendor_agps_data_conn_open = shimmedAgpsInterface.data_conn_open;
+		vendor_agps_data_conn_closed = shimmedAgpsInterface.data_conn_closed;
+		vendor_agps_data_conn_failed = shimmedAgpsInterface.data_conn_failed;
+		vendor_agps_set_server = shimmedAgpsInterface.set_server;
+		vendor_agps_data_conn_open_with_apn_ip_type =
+				shimmedAgpsInterface.data_conn_open_with_apn_ip_type;
 
-		vendor_agps_data_conn_failed = aGpsInterface->data_conn_failed;
-		aGpsInterface->data_conn_failed = shim_agps_data_conn_failed;
-
-		vendor_agps_set_server = aGpsInterface->set_server;
-		aGpsInterface->set_server = shim_agps_set_server;
-
-		vendor_agps_data_conn_open_with_apn_ip_type = aGpsInterface->data_conn_open_with_apn_ip_type;
-		aGpsInterface->data_conn_open_with_apn_ip_type = shim_agps_data_conn_open_with_apn_ip_type;
-		return aGpsInterface;
+		shimmedAgpsInterface.size = sizeof(shimmedAgpsInterface);
+		shimmedAgpsInterface.init = shim_agps_init;
+		shimmedAgpsInterface.data_conn_open = shim_agps_data_conn_open;
+		shimmedAgpsInterface.data_conn_closed = shim_agps_data_conn_closed;
+		shimmedAgpsInterface.data_conn_failed = shim_agps_data_conn_failed;
+		shimmedAgpsInterface.set_server = shim_agps_set_server;
+		shimmedAgpsInterface.data_conn_open_with_apn_ip_type =
+				shim_agps_data_conn_open_with_apn_ip_type;
+		return &shimmedAgpsInterface;
 	}
 	return vendor_gps_get_extension(name);
 }
