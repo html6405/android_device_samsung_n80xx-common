@@ -20,7 +20,10 @@
 #include <stdint.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <limits.h>
 #include <poll.h>
+#include <stdbool.h>
+#include <sys/eventfd.h>
 #include <sys/select.h>
 #include <hardware/sensors.h>
 #include <hardware/hardware.h>
@@ -132,8 +135,6 @@ int smdk4x12_sensors_set_delay(struct sensors_poll_device_t *dev, int handle,
 	return 0;
 }
 
-int mFlushed;
-
 static int smdk4x12_sensors_batch(struct sensors_poll_device_1 *dev, int handle,
         int flags, int64_t period_ns, int64_t timeout) {
 	(void)flags;
@@ -143,10 +144,31 @@ static int smdk4x12_sensors_batch(struct sensors_poll_device_1 *dev, int handle,
 }
 
 static int smdk4x12_sensors_flush(struct sensors_poll_device_1 *dev, int handle) {
-	(void)dev;
-	mFlushed |= (1 << handle);
-	ALOGD("%s: handle: %d", __func__, handle);
-	return 0;
+	struct smdk4x12_sensors_device *device = (struct smdk4x12_sensors_device *)dev;
+	const uint64_t wake = 1;
+	int i;
+
+	if (device == NULL || device->flush_pending == NULL)
+		return -EINVAL;
+	for (i = 0; i < device->handlers_count; i++) {
+		if (device->handlers[i] == NULL || device->handlers[i]->handle != handle)
+			continue;
+		pthread_mutex_lock(&device->flush_lock);
+		if (device->flush_pending[i] == UINT_MAX) {
+			pthread_mutex_unlock(&device->flush_lock);
+			return -EOVERFLOW;
+		}
+		device->flush_pending[i]++;
+		if (write(device->wake_fd, &wake, sizeof(wake)) != sizeof(wake)) {
+			int error = errno;
+			device->flush_pending[i]--;
+			pthread_mutex_unlock(&device->flush_lock);
+			return -error;
+		}
+		pthread_mutex_unlock(&device->flush_lock);
+		return 0;
+	}
+	return -EINVAL;
 }
 
 int smdk4x12_sensors_poll(struct sensors_poll_device_t *dev,
@@ -154,12 +176,14 @@ int smdk4x12_sensors_poll(struct sensors_poll_device_t *dev,
 {
 	struct smdk4x12_sensors_device *device;
 	int i, j;
-	int c, n;
+	int n;
 	int poll_rc, rc;
+	bool has_flush;
+	uint64_t wake_count;
 
 //	ALOGD("%s(%p, %p, %d)", __func__, dev, data, count);
 
-	if (dev == NULL)
+	if (dev == NULL || data == NULL || count <= 0)
 		return -EINVAL;
 
 	device = (struct smdk4x12_sensors_device *) dev;
@@ -171,17 +195,30 @@ int smdk4x12_sensors_poll(struct sensors_poll_device_t *dev,
 	n = 0;
 
 	do {
-		poll_rc = poll(device->poll_fds, device->poll_fds_count, n > 0 ? 0 : -1);
+		pthread_mutex_lock(&device->flush_lock);
+		has_flush = false;
+		for (i = 0; i < device->handlers_count; i++)
+			has_flush |= device->flush_pending[i] != 0;
+		pthread_mutex_unlock(&device->flush_lock);
+		poll_rc = poll(device->poll_fds, device->poll_fds_count,
+			(n > 0 || has_flush) ? 0 : -1);
 		if (poll_rc < 0) {
-			ALOGE("%s: poll failed, rc=%d", __func__, poll_rc);
-			return 0;
+			int error = errno;
+			if (error == EINTR)
+				continue;
+			ALOGE("%s: poll failed: %s", __func__, strerror(error));
+			return -error;
 		}
 
-		for (i = 0; i < device->poll_fds_count; i++) {
+		for (i = 0; i < device->poll_fds_count && n < count; i++) {
 			if (!(device->poll_fds[i].revents & POLLIN))
 				continue;
+			if (device->poll_fds[i].fd == device->wake_fd) {
+				read(device->wake_fd, &wake_count, sizeof(wake_count));
+				continue;
+			}
 
-			for (j = 0; j < device->handlers_count; j++) {
+			for (j = 0; j < device->handlers_count && n < count; j++) {
 				if (device->handlers[j] == NULL || device->handlers[j]->poll_fd != device->poll_fds[i].fd || device->handlers[j]->get_data == NULL)
 					continue;
 
@@ -191,11 +228,25 @@ int smdk4x12_sensors_poll(struct sensors_poll_device_t *dev,
 					poll_rc = -1;
 				} else {
 					n++;
-					count--;
 				}
 			}
 		}
-	} while ((poll_rc > 0 || n < 1) && count > 0);
+		// Each flush completion occupies exactly one caller-provided slot.
+		// Input events already waiting in the kernel are delivered first.
+		pthread_mutex_lock(&device->flush_lock);
+		for (j = 0; j < device->handlers_count && n < count; j++) {
+			while (device->flush_pending[j] != 0 && n < count) {
+				memset(&data[n], 0, sizeof(data[n]));
+				data[n].version = META_DATA_VERSION;
+				data[n].type = SENSOR_TYPE_META_DATA;
+				data[n].meta_data.sensor = device->handlers[j]->handle;
+				data[n].meta_data.what = META_DATA_FLUSH_COMPLETE;
+				device->flush_pending[j]--;
+				n++;
+			}
+		}
+		pthread_mutex_unlock(&device->flush_lock);
+	} while (n == 0);
 
 	return n;
 }
@@ -215,6 +266,9 @@ int smdk4x12_sensors_close(hw_device_t *device)
 		return -EINVAL;
 
 	smdk4x12_sensors_device = (struct smdk4x12_sensors_device *) device;
+	close(smdk4x12_sensors_device->wake_fd);
+	pthread_mutex_destroy(&smdk4x12_sensors_device->flush_lock);
+	free(smdk4x12_sensors_device->flush_pending);
 
 	if (smdk4x12_sensors_device->poll_fds != NULL)
 		free(smdk4x12_sensors_device->poll_fds);
@@ -244,6 +298,22 @@ int smdk4x12_sensors_open(const struct hw_module_t* module, const char *id,
 
 	smdk4x12_sensors_device = (struct smdk4x12_sensors_device *)
 		calloc(1, sizeof(struct smdk4x12_sensors_device));
+	if (smdk4x12_sensors_device == NULL)
+		return -ENOMEM;
+	smdk4x12_sensors_device->wake_fd = eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
+	if (smdk4x12_sensors_device->wake_fd < 0) {
+		int error = errno;
+		free(smdk4x12_sensors_device);
+		return -error;
+	}
+	i = pthread_mutex_init(&smdk4x12_sensors_device->flush_lock, NULL);
+	if (i != 0) {
+		close(smdk4x12_sensors_device->wake_fd);
+		free(smdk4x12_sensors_device);
+		return -i;
+	}
+	smdk4x12_sensors_device->flush_pending = (unsigned int *)
+		calloc(smdk4x12_sensors_handlers_count, sizeof(unsigned int));
 	smdk4x12_sensors_device->device.common.tag = HARDWARE_DEVICE_TAG;
 	smdk4x12_sensors_device->device.common.version = SENSORS_DEVICE_API_VERSION_1_3;
 	smdk4x12_sensors_device->device.common.module = (struct hw_module_t *) module;
@@ -256,7 +326,16 @@ int smdk4x12_sensors_open(const struct hw_module_t* module, const char *id,
 	smdk4x12_sensors_device->handlers = smdk4x12_sensors_handlers;
 	smdk4x12_sensors_device->handlers_count = smdk4x12_sensors_handlers_count;
 	smdk4x12_sensors_device->poll_fds = (struct pollfd *)
-		calloc(1, smdk4x12_sensors_handlers_count * sizeof(struct pollfd));
+		calloc(smdk4x12_sensors_handlers_count + 1, sizeof(struct pollfd));
+	if (smdk4x12_sensors_device->flush_pending == NULL ||
+	    smdk4x12_sensors_device->poll_fds == NULL) {
+		free(smdk4x12_sensors_device->poll_fds);
+		free(smdk4x12_sensors_device->flush_pending);
+		pthread_mutex_destroy(&smdk4x12_sensors_device->flush_lock);
+		close(smdk4x12_sensors_device->wake_fd);
+		free(smdk4x12_sensors_device);
+		return -ENOMEM;
+	}
 
 	p = 0;
 	for (i = 0; i < smdk4x12_sensors_handlers_count; i++) {
@@ -271,7 +350,9 @@ int smdk4x12_sensors_open(const struct hw_module_t* module, const char *id,
 		}
 	}
 
-	smdk4x12_sensors_device->poll_fds_count = p;
+	smdk4x12_sensors_device->poll_fds[p].fd = smdk4x12_sensors_device->wake_fd;
+	smdk4x12_sensors_device->poll_fds[p].events = POLLIN;
+	smdk4x12_sensors_device->poll_fds_count = p + 1;
 
 	*device = &(smdk4x12_sensors_device->device.common);
 
