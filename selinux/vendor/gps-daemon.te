@@ -1,5 +1,5 @@
 
-allow glgps shell_exec:file { entrypoint getattr read };
+allow glgps shell_exec:file { getattr read };
 allow glgps sysfs_cpuinfo:dir r_dir_perms;
 allow glgps sysfs_cpuinfo:file r_file_perms;
 allow glgps system_data_file:dir { add_name remove_name write };

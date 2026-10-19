@@ -1,11 +1,11 @@
 # sec_keyboard
 type sec_keyboard, domain;
-type sec_keyboard_exec, exec_type, file_type;
+type sec_keyboard_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(sec_keyboard)
 
 allow sec_keyboard self:capability { sys_admin };
-allow sec_keyboard input_device:file { read entrypoint getattr};
+allow sec_keyboard input_device:file { read getattr };
 allow sec_keyboard dock_device:chr_file { open read write ioctl };
 allow sec_keyboard sysfs_cpuinfo:dir r_dir_perms;
 allow sec_keyboard sysfs_cpuinfo:file { read open getattr };
