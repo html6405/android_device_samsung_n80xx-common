@@ -113,11 +113,16 @@ static void log_gpsStatus_vendor(char* func, GpsStatus* status) {
 
 static void copy_sv_info_from_vendor(GpsSvStatus_vendor source, GpsSvStatus* target) {
     target->size = source.size;
-    target->num_svs = source.num_svs;
+    int numSvs = source.num_svs;
+    if (numSvs < 0)
+        numSvs = 0;
+    if (numSvs > GPS_MAX_SVS)
+        numSvs = GPS_MAX_SVS;
+    target->num_svs = numSvs;
     target->ephemeris_mask = source.ephemeris_mask;
     target->almanac_mask = source.almanac_mask;
     target->used_in_fix_mask = source.used_in_fix_mask;
-    for (int index = 0; index < source.num_svs; index++) {
+    for (int index = 0; index < numSvs; index++) {
 	target->sv_list[index].size = source.sv_list[index].size;
         target->sv_list[index].prn = source.sv_list[index].prn;
         target->sv_list[index].snr = source.sv_list[index].snr;
@@ -222,6 +227,11 @@ static void shim_status_cb(GpsStatus* status) {
 
 static void shim_sv_status_cb(GpsSvStatus* sv_info) {
     GpsSvStatus_vendor* gpsSvStatus_vendor_info = (GpsSvStatus_vendor*)sv_info;
+	int numSvs = gpsSvStatus_vendor_info->num_svs;
+	if (numSvs < 0)
+		numSvs = 0;
+	if (numSvs > GPS_MAX_SVS)
+		numSvs = GPS_MAX_SVS;
 
     ALOGD("%s: size=%d num_svs=%d ephemeris_mask=%x almanac_mask=%x used_in_fix_mask=%x",
        __func__,
@@ -230,7 +240,7 @@ static void shim_sv_status_cb(GpsSvStatus* sv_info) {
        gpsSvStatus_vendor_info->ephemeris_mask,
        gpsSvStatus_vendor_info->almanac_mask,
        gpsSvStatus_vendor_info->used_in_fix_mask);
-    for (int index = 0; index < sv_info->num_svs; index++) {
+    for (int index = 0; index < numSvs; index++) {
         ALOGD("%s:   svinfo[%d] - size=%d prn=%d snr=%f elevation=%f azimuth=%f",
             __func__,
             index,
