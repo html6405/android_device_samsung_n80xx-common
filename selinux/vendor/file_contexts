@@ -83,12 +83,11 @@
 /data/cfw(/.*)?							 u:object_r:firmware_exynos_data_file:s0
 
 # Vendor
-/(vendor|system/vendor)/lib/hw/gralloc.exynos4.so							                u:object_r:system_file:s0
-/(vendor|system/vendor)/lib/hw/hwcomposer.exynos4.so							            u:object_r:system_file:s0
-/(vendor|system/vendor)/bin/hw/android\.hardware\.power@1\.0-service\.exynos4412			u:object_r:hal_power_default_exec:s0
+/(vendor|system/vendor)/bin/hw/android.hardware.power-service.pixel-libperfmgr              u:object_r:hal_power_default_exec:s0
 /(vendor|system/vendor)/bin/hw/android\.hardware\.gnss@[0-9]\.[0-9]-service\.exynos4		u:object_r:hal_gnss_default_exec:s0
-/(vendor|system/vendor)/bin/hw/android.hardware.light-service.samsung 		                u:object_r:hal_light_default_exec:s0
-/(vendor|system/vendor)/bin/hw/vendor\.lineage\.touch@1\.0-service\.samsung                 u:object_r:hal_lineage_touch_default_exec:s0
+/(vendor|system/vendor)/bin/hw/android\.hardware\.light-service\.samsung                    u:object_r:hal_light_default_exec:s0
+/(vendor|system/vendor)/bin/hw/android\.hardware\.vibrator-service\.samsung                 u:object_r:hal_vibrator_default_exec:s0
+/(vendor|system/vendor)/bin/hw/vendor\.lineage\.touch-service\.samsung                     u:object_r:hal_lineage_touch_default_exec:s0
 /vendor/bin/hw/android.hardware.authsecret@1.0-service                                      u:object_r:hal_authsecret_default_exec:s0
 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service.software                             u:object_r:hal_gatekeeper_default_exec:s0
 /vendor/bin/hw/android.hardware.ir@1.0-service.samsung                                      u:object_r:hal_ir_default_exec:s0
@@ -98,7 +97,7 @@
 /(vendor|system/vendor)/bin/hw/android.hardware.wifi@1.0-service-lazy.legacy                u:object_r:hal_wifi_default_exec:s0
 
 # LiveDisplay HAL
-/(vendor|system/vendor)/bin/hw/vendor\.lineage\.livedisplay@2\.0-service\.samsung-exynos    u:object_r:hal_lineage_livedisplay_exynos_exec:s0
+/(vendor|system/vendor)/bin/hw/vendor\.lineage\.livedisplay-service\.samsung-exynos         u:object_r:hal_lineage_livedisplay_exynos_exec:s0
 
 # healthd
 /sys/devices/platform/i2c-gpio.17/i2c-17/17-0066/max77693-charger(/.*)?	u:object_r:sysfs_batteryinfo:s0
