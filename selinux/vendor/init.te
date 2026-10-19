@@ -187,5 +187,3 @@ allow init adb_data_file:dir search;
 allow init privapp_data_file:dir relabelfrom;
 allow init seapp_contexts_file:file open;
 allow init system_app_data_file:dir relabelfrom;
-
-domain_auto_trans(init, rootfs, cpboot-daemon, macloader, tinyplay, tweaks)

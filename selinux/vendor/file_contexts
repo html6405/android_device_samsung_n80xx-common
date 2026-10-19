@@ -56,7 +56,6 @@
 /sys/module/dhd/parameters/firmware_path                         u:object_r:wifi_firmware_path:s0
 /sys/module/dhd/parameters/nvram_path                            u:object_r:wifi_firmware_path:s0
 /efs/wifi(/.*)?                                                  u:object_r:wifi_efs_file:s0
-/system/bin/clean_scratch_files                                  u:object_r:clean_scratch_files_exec:s0
 
 # Display
 /sys/devices/platform/s5p-dsim.0(/.*)?			u:object_r:display_vendor_data_file:s0
@@ -66,7 +65,6 @@
 # Executables
 /vendor/bin/cbd                                                  u:object_r:cpboot-daemon_exec:s0
 /vendor/bin/macloader                                     u:object_r:macloader_exec:s0
-/system/bin/tinyplay                                             u:object_r:tinyplay_exec:s0
 /vendor/bin/glgps                                         u:object_r:glgps_exec:s0
 /vendor/bin/restart_rild.sh                               u:object_r:radioreset_exec:s0
 /vendor/bin/tweaks.sh                               u:object_r:tweaks_exec:s0

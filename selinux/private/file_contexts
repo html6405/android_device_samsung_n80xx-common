@@ -4,3 +4,9 @@
 
 # CPU
 /sys/devices/system/cpu(/.*)?                                                         u:object_r:sysfs_cpuinfo:s0
+
+# Audio utility
+/system/bin/tinyplay                                                                 u:object_r:tinyplay_exec:s0
+
+# fs_mgr remount symlink
+/system/bin/clean_scratch_files                                                      u:object_r:remount_exec:s0
