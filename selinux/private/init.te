@@ -1,4 +1,4 @@
-allow init firmware_exynos:dir r_dir_perms;
+allow init { firmware_exynos firmware_exynos_data_file }:dir r_dir_perms;
 allow init blkid_exec:file r_file_perms;
 allow init incident_exec:file r_file_perms;
 allow init incident_helper_exec:file r_file_perms;
