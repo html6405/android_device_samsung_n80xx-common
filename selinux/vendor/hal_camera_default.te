@@ -1,1 +1,4 @@
 allow hal_camera_default mnt_user_file:dir search;
+allow hal_camera_default video_device:chr_file rw_file_perms;
+allow hal_camera_default ion_device:chr_file rw_file_perms;
+allow hal_camera_default camera_device:chr_file rw_file_perms;
