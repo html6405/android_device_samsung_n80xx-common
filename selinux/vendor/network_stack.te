@@ -1,2 +1,2 @@
-allow network_stack sysfs_cpuinfo:dir r_dir_perms;
-allow network_stack sysfs_cpuinfo:file { getattr open read };
+allow network_stack sysfs_devices_system_cpu:dir r_dir_perms;
+allow network_stack sysfs_devices_system_cpu:file { getattr open read };

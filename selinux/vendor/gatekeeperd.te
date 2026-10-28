@@ -1,2 +1,2 @@
-allow gatekeeperd sysfs_cpuinfo:dir r_dir_perms;
-allow gatekeeperd sysfs_cpuinfo:file r_file_perms;
+allow gatekeeperd sysfs_devices_system_cpu:dir r_dir_perms;
+allow gatekeeperd sysfs_devices_system_cpu:file r_file_perms;
