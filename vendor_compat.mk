@@ -7,7 +7,7 @@ include vendor/samsung/n80xx/n80xx-vendor.mk
 
 # Install the generated GPS executable with unused legacy dependencies removed.
 ifneq ($(TARGET_PRODUCT),lineage_n8020)
-PRODUCT_COPY_FILES := $(filter-out %:vendor/bin/glgps,$(PRODUCT_COPY_FILES))
+PRODUCT_COPY_FILES := $(filter-out %:vendor/bin/glgps %:vendor/lib/libsec-ril.so,$(PRODUCT_COPY_FILES))
 endif
 LOCAL_PATH := $(_n80xx_vendor_compat_local_path)
 _n80xx_vendor_compat_local_path :=

@@ -106,5 +106,5 @@ $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-he
 $(call inherit-product, device/samsung/n80xx-common/vendor_compat.mk)
 
 ifneq ($(TARGET_PRODUCT),lineage_n8020)
-PRODUCT_PACKAGES += n80xx_glgps_compat
+PRODUCT_PACKAGES += n80xx_glgps_compat n80xx_libsec_ril_compat smdk4412_libcutils_compat
 endif
