@@ -103,4 +103,8 @@ PRODUCT_CHARACTERISTICS := tablet
 
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 
-$(call inherit-product-if-exists, vendor/samsung/n80xx/n80xx-vendor.mk)
+$(call inherit-product, device/samsung/n80xx-common/vendor_compat.mk)
+
+ifneq ($(TARGET_PRODUCT),lineage_n8020)
+PRODUCT_PACKAGES += n80xx_glgps_compat
+endif
