@@ -13,7 +13,12 @@ LOCAL_CHECK_ELF_FILES := false
 LOCAL_STRIP_MODULE := false
 LOCAL_SHARED_LIBRARIES := smdk4412_libcutils_compat
 
+ifeq ($(TARGET_PRODUCT),lineage_n8020)
+# Keep the Qualcomm modem blob and its existing libshim_ril preload.
+_n80xx_ril_input := vendor/samsung/n8020/proprietary/lib/libsec-ril.so
+else
 _n80xx_ril_input := vendor/samsung/n80xx/system/lib/libsec-ril.so
+endif
 _n80xx_ril_patchelf := prebuilts/extract-tools/linux-x86/bin/patchelf-0_18
 _n80xx_ril_output := $(call intermediates-dir-for,SHARED_LIBRARIES,$(LOCAL_MODULE))/fixed/libsec-ril.so
 $(_n80xx_ril_output): PRIVATE_PATCHELF := $(_n80xx_ril_patchelf)

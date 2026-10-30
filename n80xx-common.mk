@@ -85,18 +85,24 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
 	fsck.f2fs
 
-# RIL
+# The Exynos modem interface belongs to the N8000 only.
+ifeq ($(TARGET_PRODUCT),lineage_n8000)
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.ril_class=SamsungExynos4RIL \
     ro.telephony.call_ring.multiple=false \
     ro.telephony.call_ring.delay=3000
+endif
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/handheld_core_hardware.xml:vendor/etc/permissions/handheld_core_hardware.xml \
-    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:vendor/etc/permissions/android.hardware.telephony.gsm.xml \
     frameworks/native/data/etc/tablet_core_hardware.xml:vendor/etc/permissions/tablet_core_hardware.xml
 
+
+ifneq ($(filter lineage_n8000 lineage_n8020,$(TARGET_PRODUCT)),)
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:vendor/etc/permissions/android.hardware.telephony.gsm.xml
+endif
 
 # Set product characteristic to tablet, needed for some ui elements
 PRODUCT_CHARACTERISTICS := tablet
@@ -106,5 +112,9 @@ $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-he
 $(call inherit-product, device/samsung/n80xx-common/vendor_compat.mk)
 
 ifneq ($(TARGET_PRODUCT),lineage_n8020)
-PRODUCT_PACKAGES += n80xx_glgps_compat n80xx_libsec_ril_compat smdk4412_libcutils_compat
+PRODUCT_PACKAGES += n80xx_glgps_compat
+endif
+
+ifneq ($(filter lineage_n8000 lineage_n8020,$(TARGET_PRODUCT)),)
+PRODUCT_PACKAGES += n80xx_libsec_ril_compat smdk4412_libcutils_compat
 endif
