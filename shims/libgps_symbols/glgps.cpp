@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <string.h>
 #include <openssl/ssl.h>
 
 extern "C" {
 
+// Keep the legacy GPS entrypoints without modifying library-owned method tables.
 const SSL_METHOD *SSLv3_method(void) {
-    const SSL_METHOD *kMethod = TLSv1_method();
-    char ssl_version[] = {0, 0x03}; // 0x0300
-
-    memcpy((void*)kMethod, ssl_version, 1);
-
-    return kMethod;
+    return TLS_method();
 }
 
 const SSL_METHOD *SSLv3_client_method(void) {
-  return SSLv3_method();
+    return TLS_client_method();
 }
 
 }
