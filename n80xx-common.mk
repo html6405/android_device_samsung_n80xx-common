@@ -118,3 +118,7 @@ endif
 ifneq ($(filter lineage_n8000 lineage_n8020,$(TARGET_PRODUCT)),)
 PRODUCT_PACKAGES += n80xx_libsec_ril_compat smdk4412_libcutils_compat
 endif
+
+# The 3.0-era Exynos ION ABI has no separate heap mask in ION_IOC_ALLOC.
+# Codec2 software buffers can use the non-contiguous system heap (bit 0).
+PRODUCT_VENDOR_PROPERTIES += ro.vendor.ion.legacy_heap_mask=1
