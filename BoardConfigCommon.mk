@@ -17,6 +17,9 @@ include device/samsung/smdk4412-common/BoardCommonConfig.mk
 
 DEVICE_PATH := device/samsung/n80xx-common
 
+# Complete system/vendor block images need no legacy OTA filesystem migration.
+TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)/releasetools
+
 # Wifi
 WIFI_DRIVER_MODULE_PATH :=
 
