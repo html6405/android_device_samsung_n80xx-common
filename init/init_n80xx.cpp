@@ -75,6 +75,15 @@ void vendor_load_properties()
     char const *serial_number_file = SERIAL_NUMBER_FILE;
     std::string serial_number;
 
+    // Apply the device's debug policy after loading partition properties. Use the
+    // build variant because vendor debug properties may be rejected by init.
+#ifdef N80XX_DEBUG_BUILD
+    property_override("ro.debuggable", "1");
+    property_override("ro.adb.secure", "0");
+#endif
+    LOG(INFO) << "N80xx ADB policy: ro.debuggable=" << GetProperty("ro.debuggable", "")
+              << ", ro.adb.secure=" << GetProperty("ro.adb.secure", "");
+
     //property_override("ro.treble.enabled", "true");
 
     if (ReadFileToString(serial_number_file, &serial_number)) {

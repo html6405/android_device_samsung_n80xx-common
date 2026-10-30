@@ -63,7 +63,7 @@ TARGET_POWERHAL_VARIANT := pegasusq
 
 # Init
 ifneq ($(WITH_TWRP), true)
-TARGET_INIT_VENDOR_LIB := libinit_n80xx
+$(call soong_config_set,libinit,vendor_init_lib,libinit_n80xx)
 endif
 
 WITH_DEXPREOPT := false
