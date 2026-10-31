@@ -31,6 +31,8 @@ LIBART_IMG_BASE := 0x30000000
 TARGET_LD_SHIM_LIBS := \
     /vendor/bin/glgps|libgps_symbols.so
 
+$(call soong_config_set,bionic_legacy,shim_libs,$(subst $(space),:,$(strip $(TARGET_LD_SHIM_LIBS))))
+
 # Graphics
 TARGET_REQUIRES_SYNCHRONOUS_SETSURFACE := true
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
