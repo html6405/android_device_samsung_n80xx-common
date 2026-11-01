@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+
+python_binary_host {
+    name: "n80xx_patch_webview_gles2",
+    main: "patch_webview_gles2.py",
+    srcs: ["patch_webview_gles2.py"],
+}
