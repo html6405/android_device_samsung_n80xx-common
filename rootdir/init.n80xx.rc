@@ -1,3 +1,6 @@
+on boot
+    chown system system /sys/class/sec/tsp/dt2w_timeout
+
 on property:debug.tracing.screen_state=1
     stop vendor.sec_keyboard
     start vendor.keyboard_kill
