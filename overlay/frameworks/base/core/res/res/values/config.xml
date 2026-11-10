@@ -21,6 +21,9 @@
      for different hardware and product builds. -->
 <resources>
 
+    <!-- The 30-pin dock driver exposes the legacy switch ABI. -->
+    <string name="config_legacyDockStatePath" translatable="false">/sys/class/switch/dock_keyboard/state</string>
+
     <!-- Whether a software navigation bar should be shown. NOTE: in the future this may be
          autodetected from the Configuration. -->
     <bool name="config_showNavigationBar">true</bool>
