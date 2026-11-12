@@ -89,6 +89,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
 	fsck.f2fs
 
+# Double-tap wake
+# Use the Android 14 HIDL Power HAL with the tablet's DT2W feature module.
+PRODUCT_PACKAGES += power.n80xx
+PRODUCT_VENDOR_PROPERTIES += ro.hardware.power=n80xx
+
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.ril_class=SamsungExynos4RIL \

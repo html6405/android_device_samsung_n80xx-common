@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: Apache-2.0
+cc_library_shared {
+    name: "power.n80xx",
+    vendor: true,
+    relative_install_path: "hw",
+    srcs: ["power.c"],
+    header_libs: ["libhardware_headers"],
+    shared_libs: ["liblog"],
+    cflags: ["-Wall", "-Wextra", "-Werror"],
+}

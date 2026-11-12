@@ -1,4 +1,5 @@
 on boot
+    chown system system /sys/class/sec/tsp/dt2w_enable
     chown system system /sys/class/sec/tsp/dt2w_timeout
 
 on property:debug.tracing.screen_state=1
