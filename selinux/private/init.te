@@ -10,5 +10,5 @@ allow init hidl_memory_hwservice:hwservice_manager find;
 allow init dnsproxyd_socket:sock_file r_file_perms;
 allow init hci_attach_dev:chr_file r_file_perms;
 allow init self:process execmem;
-allow init sysfs_cpuinfo:file rw_file_perms;
+allow init sysfs_devices_system_cpu:file rw_file_perms;
 allow init hal_graphics_allocator_hwservice:hwservice_manager find;

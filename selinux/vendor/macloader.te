@@ -8,5 +8,3 @@ allow macloader rootfs:lnk_file getattr;
 allow macloader self:capability { chown fowner fsetid };
 allow macloader sysfs:file { open write };
 allow macloader unlabeled:dir search;
-
-

@@ -13,4 +13,3 @@ allow toolbox mediaprovider_app:file r_file_perms;
 allow toolbox system_data_root_file:dir w_dir_perms;
 allow toolbox system_data_root_file:file create_file_perms;
 allow toolbox device_as_webcam:file r_file_perms;
-

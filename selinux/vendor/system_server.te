@@ -29,7 +29,7 @@ allow system_server userspace_reboot_config_prop:file { getattr open read };
 allow system_server userspace_reboot_exported_prop:file { getattr open };
 allow system_server adb_data_file:file { getattr open read };
 allow system_server sysfs:file { open read write };
-allow system_server sysfs_cpuinfo:file { getattr open read };
+allow system_server sysfs_devices_system_cpu:file { getattr open read };
 allow system_server vendor_default_prop:file { getattr open read };
 allow system_server vendor_file:file { execute getattr open read };
 allow system_server proc:file r_file_perms;
