@@ -12,3 +12,10 @@ allow sec_keyboard sysfs_devices_system_cpu:file { read open getattr };
 type ttySAC2, domain;
 type ttySAC2_exec, exec_type, file_type;
 init_daemon_domain(ttySAC2)
+
+# PID state and validation are limited to the keyboard domain.
+allow sec_keyboard sec_keyboard_pid_file:dir { search getattr write add_name remove_name };
+allow sec_keyboard sec_keyboard_pid_file:file { create getattr open read write setattr rename unlink };
+allow sec_keyboard self:dir search;
+allow sec_keyboard self:file { getattr open read };
+allow vendor_init sec_keyboard_pid_file:dir { create search getattr setattr relabelto };

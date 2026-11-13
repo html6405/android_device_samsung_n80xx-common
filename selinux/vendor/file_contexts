@@ -64,3 +64,6 @@
 /dev/stune(/.*)?						u:object_r:cgroup:s0
 
 # USB
+
+# Keyboard daemon PID state
+/data/vendor/sec_keyboard(/.*)?                           u:object_r:sec_keyboard_pid_file:s0

@@ -32,6 +32,7 @@
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>
+#include <errno.h>
 
 void setline(int fd, int flags, int speed)
 {
@@ -62,6 +63,48 @@ struct input_types {
 	int flush;
 	int (*init)(int fd, long *id, long *extra);
 };
+
+
+#define KEYBOARD_PID_FILE "/data/vendor/sec_keyboard/pid"
+#define KEYBOARD_PID_TEMP "/data/vendor/sec_keyboard/pid.new"
+
+/* Publish atomically: the helper must never observe a partially written PID. */
+static int publish_keyboard_pid(void)
+{
+    char buf[32];
+    int len = snprintf(buf, sizeof(buf), "%d\n", (int)getpid());
+    int fd = open(KEYBOARD_PID_TEMP,
+                  O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC | O_NOFOLLOW, 0600);
+    if (fd < 0)
+        return -1;
+    if (fchmod(fd, 0600) < 0)
+        goto fail;
+    for (int done = 0; done < len;) {
+        ssize_t n = write(fd, buf + done, len - done);
+        if (n < 0 && errno == EINTR)
+            continue;
+        if (n <= 0)
+            goto fail;
+        done += n;
+    }
+    if (close(fd) < 0) {
+        unlink(KEYBOARD_PID_TEMP);
+        return -1;
+    }
+    if (rename(KEYBOARD_PID_TEMP, KEYBOARD_PID_FILE) < 0) {
+        unlink(KEYBOARD_PID_TEMP);
+        return -1;
+    }
+    return 0;
+fail:
+    {
+        int saved_errno = errno;
+        close(fd);
+        unlink(KEYBOARD_PID_TEMP);
+        errno = saved_errno;
+    }
+    return -1;
+}
 
 int main(int argc, char **argv)
 {
@@ -101,6 +144,10 @@ int main(int argc, char **argv)
 		fprintf(stderr, "can't set device type\n");
 		return 1;
 	}
+
+    if (publish_keyboard_pid() < 0) {
+        perror("sec_keyboard: cannot publish PID");
+    }
 
 	while(1) read(fd, NULL, 0);
 
