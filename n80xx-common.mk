@@ -94,18 +94,25 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += power.n80xx
 PRODUCT_VENDOR_PROPERTIES += ro.hardware.power=n80xx
 
-# RIL
+# The Samsung XMM6262 compatibility properties belong to the N8000.
+ifeq ($(TARGET_PRODUCT),lineage_n8000)
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.ril_class=SamsungExynos4RIL \
     ro.telephony.call_ring.multiple=false \
     ro.telephony.call_ring.delay=3000
+endif
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/handheld_core_hardware.xml:vendor/etc/permissions/handheld_core_hardware.xml \
-    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:vendor/etc/permissions/android.hardware.telephony.gsm.xml \
     frameworks/native/data/etc/tablet_core_hardware.xml:vendor/etc/permissions/tablet_core_hardware.xml
 
+
+# Advertise telephony only on cellular variants.
+ifneq ($(filter lineage_n8000 lineage_n8020,$(TARGET_PRODUCT)),)
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:vendor/etc/permissions/android.hardware.telephony.gsm.xml
+endif
 
 # Set product characteristic to tablet, needed for some ui elements
 PRODUCT_CHARACTERISTICS := tablet
