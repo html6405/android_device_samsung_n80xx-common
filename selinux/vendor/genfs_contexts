@@ -1,3 +1,6 @@
 #dt2w
 genfscon sysfs /devices/virtual/sec/tsp/dt2w_enable u:object_r:sysfs_dt2w:s0
 genfscon sysfs /devices/virtual/sec/tsp/dt2w_timeout u:object_r:sysfs_dt2w:s0
+
+# S-Pen gesture control on the Note 10.1 family.
+genfscon sysfs /devices/virtual/sec/sec_epen/epen_gestures u:object_r:sysfs_n80xx_epen:s0

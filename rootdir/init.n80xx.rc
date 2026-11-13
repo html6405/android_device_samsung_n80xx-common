@@ -1,3 +1,7 @@
+on post-fs-data
+    mkdir /data/vendor/sec_keyboard 0700 root root
+    restorecon_recursive /data/vendor/sec_keyboard
+
 on boot
     chown system system /sys/class/sec/tsp/dt2w_timeout
 
@@ -10,6 +14,7 @@ on property:debug.tracing.screen_state=2
 
 service vendor.keyboard_kill /vendor/bin/sec_keyboard_kill.sh
     class main
+    group system
     oneshot
     disabled
-	  seclabel u:r:sec_keyboard:s0
+    seclabel u:r:sec_keyboard:s0

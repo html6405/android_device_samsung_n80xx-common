@@ -1,1 +1,4 @@
 allow hal_lineage_touch_default sysfs:file { getattr open read };
+
+# Samsung touch HAL controls the N80xx S-Pen gesture switch.
+allow hal_lineage_touch_default sysfs_n80xx_epen:file rw_file_perms;

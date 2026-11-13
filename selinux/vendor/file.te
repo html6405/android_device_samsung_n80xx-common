@@ -2,3 +2,8 @@ typeattribute firmware_mfc vendor_file_type;
 #type proc_cmdline, fs_type, proc_type;
 type sysfs_slab, fs_type, sysfs_type;
 type sysfs_dt2w, fs_type, sysfs_type;
+
+type sysfs_n80xx_epen, fs_type, sysfs_type;
+
+# Keyboard daemon PID state.
+type sec_keyboard_pid_file, file_type, data_file_type;
