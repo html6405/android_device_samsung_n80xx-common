@@ -1,6 +1,0 @@
-
-allow tinyplay audio_device:chr_file { ioctl open read write };
-allow tinyplay audio_device:dir r_dir_perms;
-allow tinyplay glgps_exec:file r_file_perms;
-
-init_daemon_domain(tinyplay);

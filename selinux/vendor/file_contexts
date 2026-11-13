@@ -53,7 +53,7 @@
 /sys/power(/.*)? 						u:object_r:sysfs_power:s0
 
 # Slab
-/sys/kernel/slab(/.*)?						u:object_r:proc_slabinfo:s0
+/sys/kernel/slab(/.*)?						u:object_r:sysfs_slab:s0
 
 # Boeffla
 /sys/devices/virtual/misc/boeffla_sound(/.*)?			u:object_r:sysfs_boeffla:s0

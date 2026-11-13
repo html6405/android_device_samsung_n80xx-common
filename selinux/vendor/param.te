@@ -1,5 +1,5 @@
 type param, domain;
-type param_exec, exec_type, file_type;
+type param_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(param);
 
