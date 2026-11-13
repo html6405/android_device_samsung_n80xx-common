@@ -28,10 +28,9 @@ MALLOC_SVELTE := true
 TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 LIBART_IMG_BASE := 0x30000000
 
-TARGET_LD_SHIM_LIBS := \
-    /vendor/bin/glgps|libgps_symbols.so
-
-$(call soong_config_set,bionic_legacy,shim_libs,$(subst $(space),:,$(strip $(TARGET_LD_SHIM_LIBS))))
+# glgps gets libgps_symbols.so through its service-local LD_PRELOAD in
+# init.target.rc. A global linker shim probes glgps from every process and
+# causes unrelated domains to request access to the GPS executable.
 
 # Graphics
 TARGET_REQUIRES_SYNCHRONOUS_SETSURFACE := true
