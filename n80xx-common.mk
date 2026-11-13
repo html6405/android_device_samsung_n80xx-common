@@ -113,3 +113,6 @@ PRODUCT_CHARACTERISTICS := tablet
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 
 $(call inherit-product-if-exists, vendor/samsung/n80xx/n80xx-vendor.mk)
+
+# Opt in to the old Exynos allocation/import ABI without enabling Codec2.
+PRODUCT_VENDOR_PROPERTIES += ro.vendor.ion.legacy_heap_mask=1
