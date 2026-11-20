@@ -39,12 +39,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/tiny_hw.xml:vendor/etc/sound/n80xx
 
 # Media
-# Keep the real OMX AVC software fallback; Samsung MFC remains provided by
-# smdk4412-common for hardware decoding, including recorded videos.
-PRODUCT_PACKAGES += \
-    libstagefright_soft_avcdec \
-    libstagefright_softomx_plugin
-
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/media_codecs_tablet.xml:vendor/etc/media_codecs.xml
 
