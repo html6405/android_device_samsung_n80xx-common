@@ -68,3 +68,6 @@
 
 # Keyboard daemon PID state
 /data/vendor/sec_keyboard(/.*)?                           u:object_r:sec_keyboard_pid_file:s0
+
+# Existing one-time PARAM initialization marker.
+/data/\.param\.info    u:object_r:n80xx_param_marker_file:s0

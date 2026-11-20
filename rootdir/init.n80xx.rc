@@ -1,4 +1,5 @@
 on post-fs-data
+    restorecon /data/.param.info
     mkdir /data/vendor/sec_keyboard 0700 root root
     restorecon_recursive /data/vendor/sec_keyboard
 

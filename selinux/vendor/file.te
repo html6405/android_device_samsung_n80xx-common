@@ -7,3 +7,6 @@ type sysfs_n80xx_epen, fs_type, sysfs_type;
 
 # Keyboard daemon PID state.
 type sec_keyboard_pid_file, file_type, data_file_type;
+
+# Marker checked by the N80xx PARAM helper domain.
+type n80xx_param_marker_file, file_type, data_file_type, core_data_file_type;

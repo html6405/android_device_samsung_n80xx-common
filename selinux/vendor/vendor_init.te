@@ -1,4 +1,5 @@
 allow vendor_init anr_data_file:dir setattr;
+allow vendor_init n80xx_param_marker_file:file getattr;
 allow vendor_init camera_data_file:file { getattr open setattr write };
 allow vendor_init device:file { create write };
 allow vendor_init dhcp_data_file:dir { getattr setattr };
