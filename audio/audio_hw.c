@@ -538,6 +538,8 @@ static void set_incall_device(struct m0_audio_device *adev)
     /* if output device isn't supported, open modem side to handset by default */
     ALOGE("%s: ril_set_call_audio_path(%d)", __func__, device_type);
     ril_set_call_audio_path(&adev->ril, device_type);
+    /* The framework scalar can stay unchanged while the modem route changes. */
+    adev_set_voice_volume(&adev->hw_device, adev->voice_volume);
 }
 
 static void force_all_standby(struct m0_audio_device *adev)
@@ -2612,8 +2614,33 @@ static int adev_set_voice_volume(struct audio_hw_device *dev, float volume)
 
     adev->voice_volume = volume;
 
-    if (adev->mode == AUDIO_MODE_IN_CALL)
-        ril_set_call_volume(&adev->ril, SOUND_TYPE_VOICE, volume);
+    if (adev->mode == AUDIO_MODE_IN_CALL) {
+        enum ril_sound_type sound_type;
+
+        switch (adev->out_device) {
+            case AUDIO_DEVICE_OUT_SPEAKER:
+            case AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET:
+            case AUDIO_DEVICE_OUT_DGTL_DOCK_HEADSET:
+            case AUDIO_DEVICE_OUT_AUX_DIGITAL:
+                sound_type = SOUND_TYPE_SPEAKER;
+                break;
+            case AUDIO_DEVICE_OUT_WIRED_HEADSET:
+            case AUDIO_DEVICE_OUT_WIRED_HEADPHONE:
+                sound_type = SOUND_TYPE_HEADSET;
+                break;
+            case AUDIO_DEVICE_OUT_BLUETOOTH_SCO:
+            case AUDIO_DEVICE_OUT_BLUETOOTH_SCO_HEADSET:
+            case AUDIO_DEVICE_OUT_BLUETOOTH_SCO_CARKIT:
+                sound_type = SOUND_TYPE_BTVOICE;
+                break;
+            default:
+                sound_type = SOUND_TYPE_VOICE;
+                break;
+        }
+        ALOGD("Call volume: route=0x%x type=%d gain=%f",
+              adev->out_device, sound_type, volume);
+        ril_set_call_volume(&adev->ril, sound_type, volume);
+    }
 
     return 0;
 }
