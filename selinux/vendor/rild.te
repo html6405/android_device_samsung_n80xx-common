@@ -30,6 +30,7 @@ allow rild kernel:dir search;
 allow rild logd:dir search;
 allow rild servicemanager:dir search;
 allow rild system_data_file:dir read;
+allow rild system_data_file:dir getattr;
 allow rild ueventd:dir search;
 allow rild vendor_init:dir search;
 

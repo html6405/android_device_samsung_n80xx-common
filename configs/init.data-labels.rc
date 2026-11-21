@@ -1,0 +1,3 @@
+# Run in the platform init context, which owns the shared app-data directory.
+on post-fs-data
+    restorecon /data/data
