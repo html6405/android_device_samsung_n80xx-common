@@ -1,0 +1,10 @@
+on post-fs-data
+    mkdir /data/vendor/param 0700 root root
+    restorecon_recursive /data/vendor/param
+    restorecon /data/param.bin
+
+service param /vendor/bin/param.sh
+    class main
+    user root
+    group root
+    oneshot

@@ -1,6 +1,16 @@
 type param, domain;
 type param_exec, exec_type, file_type, vendor_file_type;
+type param_block_device, dev_type;
+type param_data_file, file_type, data_file_type;
+type param_legacy_backup_file, file_type, data_file_type;
 
 init_daemon_domain(param);
 
-allow param toolbox_exec:file { execute execute_no_trans getattr open read };
+allow param toolbox_exec:file { rx_file_perms execute_no_trans };
+allow param shell_exec:file rx_file_perms;
+allow param vendor_file:file r_file_perms;
+allow param block_device:dir search;
+allow param param_block_device:blk_file rw_file_perms;
+allow param param_data_file:dir rw_dir_perms;
+allow param param_data_file:file create_file_perms;
+allow param param_legacy_backup_file:file r_file_perms;

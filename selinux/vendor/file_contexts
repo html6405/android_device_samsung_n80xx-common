@@ -6,6 +6,11 @@
 # RIL
 
 # Block labeling
+/dev/block/mmcblk0p4                                             u:object_r:param_block_device:s0
+
+# Keep the existing backup readable while migrating PARAM state to vendor data.
+/data/param\.bin                                                u:object_r:param_legacy_backup_file:s0
+/data/vendor/param(/.*)?                                         u:object_r:param_data_file:s0
 
 # Camera
 
