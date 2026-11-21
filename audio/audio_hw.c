@@ -362,6 +362,17 @@ static int start_call(struct m0_audio_device *adev)
     bt_on = adev->out_device & AUDIO_DEVICE_OUT_ALL_SCO;
 
     if (bt_on) {
+       struct mixer_ctl *ctl = mixer_get_ctl_by_name(adev->mixer, "AIF2 Mode");
+
+       /* The modem supplies the AIF2 clocks. Route teardown leaves the
+        * cached mode at Master; restore Slave before hw_params applies it
+        * when opening the modem PCMs for a subsequent Bluetooth call. */
+       if (!ctl || mixer_ctl_set_value(ctl, 0, 0) != 0) {
+           ALOGE("Cannot select AIF2 Slave mode for Bluetooth call");
+           return -EINVAL;
+       }
+       ALOGD("Opening Bluetooth call with AIF2 Slave mode");
+
        /* use amr-nb for bluetooth */
        pcm_config_vx.rate = adev->bluetooth_wb ? VX_WB_SAMPLING_RATE : VX_NB_SAMPLING_RATE;
     } else {
