@@ -35,7 +35,7 @@ int (*_ril_connect)(void *);
 int (*_ril_is_connected)(void *);
 int (*_ril_disconnect)(void *);
 int (*_ril_set_call_volume)(void *, enum ril_sound_type, int);
-int (*_ril_set_call_audio_path)(void *, enum ril_audio_path);
+int (*_ril_set_call_audio_path)(void *, enum ril_audio_path, int);
 int (*_ril_set_call_clock_sync)(void *, enum ril_clock_state);
 int (*_ril_set_two_mic_control)(void *, enum ril_two_mic_device, enum ril_two_mic_state);
 int (*_ril_set_mic_mute)(void *, enum ril_mic_mute);
@@ -175,7 +175,8 @@ int ril_set_call_audio_path(struct ril_handle *ril, enum ril_audio_path path)
     if (ril_connect_if_required(ril))
         return 0;
 
-    return _ril_set_call_audio_path(ril->client, path);
+    /* Exynos4 libsecril-client expects ExtraVolume as its third argument. */
+    return _ril_set_call_audio_path(ril->client, path, 0 /* ORIGINAL_PATH */);
 }
 
 int ril_set_call_clock_sync(struct ril_handle *ril, enum ril_clock_state state)

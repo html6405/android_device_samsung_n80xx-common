@@ -51,8 +51,9 @@ enum ril_audio_path {
     SOUND_AUDIO_PATH_HEADSET,
     SOUND_AUDIO_PATH_SPEAKER,
     SOUND_AUDIO_PATH_BLUETOOTH,
-    SOUND_AUDIO_PATH_BLUETOOTH_NO_NR,
-    SOUND_AUDIO_PATH_HEADPHONE
+    /* libsecril-client reserves value 4 for STEREO_BT. */
+    SOUND_AUDIO_PATH_BLUETOOTH_NO_NR = 6,
+    SOUND_AUDIO_PATH_HEADPHONE = 5
 };
 
 enum ril_clock_state {
