@@ -8,12 +8,14 @@ ROMs are published in each device repository so downloads, checksums, requiremen
 
 | Model | Release page | LOS 23.2 status |
 | --- | --- | --- |
-| GT-N8000 | [Downloads and release notes](https://github.com/html6405/android_device_samsung_n8000/releases) | Experimental build available; tested on one 32 GB device. |
+| GT-N8000 | [2026-11-21 experimental release](https://github.com/html6405/android_device_samsung_n8000/releases/tag/lineage-23.2-20261121) | Vanilla userdebug; tested on one 32 GB device. SELinux Permissive; platform HEVC disabled. See model-specific known issues. |
 | GT-N8010 | [Downloads](https://github.com/html6405/android_device_samsung_n8010/releases) | No LOS 23.2 ROM release yet. |
 | GT-N8013 | [Downloads](https://github.com/html6405/android_device_samsung_n8013/releases) | No LOS 23.2 ROM release yet. |
 | GT-N8020 | [Downloads](https://github.com/html6405/android_device_samsung_n8020/releases) | No LOS 23.2 ROM release yet; separate modem/device validation is required. |
 
 The N8000 ROM requires a prepared **2 GiB SYSTEM / 152 MiB CACHE** layout. The separate [N80xx repartitioning project](https://github.com/html6405/n80xx-repartition/releases) documents supported layouts and risks. Read its device-specific notes before use; repartitioning is not part of ROM updates.
+
+The 2026-11-21 N8000 release passed final Prime AVC playback and forward/backward seeking. Earlier candidate tests covered Bluetooth call audio through the tested Dots, post-call media audio, camera AVC recording/playback and a bounded unplugged sleep/wake test. These results do not validate the other models. The intermittent partial-image issue after seeking and dock/modem boot reports remain open; refer to the device release notes for exact test limits.
 
 ## Shared compatibility areas
 
