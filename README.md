@@ -8,7 +8,7 @@ ROMs are published in each device repository so downloads, checksums, requiremen
 
 | Model | Release page | LOS 23.2 status |
 | --- | --- | --- |
-| GT-N8000 | [2026-11-21 experimental release](https://github.com/html6405/android_device_samsung_n8000/releases/tag/lineage-23.2-20261121) | Vanilla userdebug; tested on one 32 GB device. SELinux Permissive; platform HEVC disabled. See model-specific known issues. |
+| GT-N8000 | [2026-11-22 experimental release](https://github.com/html6405/android_device_samsung_n8000/releases/tag/lineage-23.2-20261122) | Vanilla Enforcing userdebug; tested on one 32 GB device. Platform HEVC disabled; known ueventd/graphics/dock issues remain. |
 | GT-N8010 | [2026-11-22 experimental release](https://github.com/html6405/android_device_samsung_n8010/releases/tag/lineage-23.2-20261122) | Enforcing, Wi-Fi-only, corrected OTA wrapper. See device-specific tests and known issues. |
 | GT-N8013 | [Downloads](https://github.com/html6405/android_device_samsung_n8013/releases) | No LOS 23.2 ROM release yet. |
 | GT-N8020 | [Downloads](https://github.com/html6405/android_device_samsung_n8020/releases) | No LOS 23.2 ROM release yet; separate modem/device validation is required. |
