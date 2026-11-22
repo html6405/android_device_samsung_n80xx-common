@@ -13,7 +13,19 @@ ROMs are published in each device repository so downloads, checksums, requiremen
 | GT-N8013 | [Downloads](https://github.com/html6405/android_device_samsung_n8013/releases) | No LOS 23.2 ROM release yet. |
 | GT-N8020 | [Downloads](https://github.com/html6405/android_device_samsung_n8020/releases) | No LOS 23.2 ROM release yet; separate modem/device validation is required. |
 
-The N8000 ROM requires a prepared **2 GiB SYSTEM / 152 MiB CACHE** layout. The separate [N80xx repartitioning project](https://github.com/html6405/n80xx-repartition/releases) documents supported layouts and risks. Read its device-specific notes before use; repartitioning is not part of ROM updates.
+Both N8000 and N8010 ROMs require a prepared **2 GiB SYSTEM** partition. Their CACHE layouts differ:
+
+| Model | SYSTEM | CACHE |
+| --- | ---: | ---: |
+| N8000 | 2 GiB | 152 MiB |
+| N8010 | 2 GiB | 739241984 bytes (about 705 MiB) |
+
+Use the separate [N80xx repartitioning project](https://github.com/html6405/n80xx-repartition/releases)
+and read its [model-specific support and installation instructions](https://github.com/html6405/n80xx-repartition#device-support).
+The N8010 profile is currently experimental. Only use a matching checked layout;
+never copy another model's boundaries. A device already at the required layout
+must not be repartitioned again. The repartitioner creates a fresh System and
+requires verified backups; ROM updates do not repartition the device.
 
 The 2026-11-21 N8000 release passed final Prime AVC playback and forward/backward seeking. Earlier candidate tests covered Bluetooth call audio through the tested Dots, post-call media audio, camera AVC recording/playback and a bounded unplugged sleep/wake test. These results do not validate the other models. The intermittent partial-image issue after seeking and dock/modem boot reports remain open; refer to the device release notes for exact test limits.
 
