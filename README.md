@@ -48,3 +48,9 @@ An auto-restarted ueventd ReadUevent+156 crash remains unresolved on N8010 and w
 previously observed on N8000. No crash-free or full Enforcing security claim is
 made. Corrected OTA backup scripts are packaged; successive OTA/addon survival
 is still pending. The experimental userdebug KernelSU profile is not hardened.
+
+## Optional microG
+
+The [optional microG Recovery installer](https://github.com/html6405/exynos4-microg-installer/releases/tag/v0.1.0-rc1) is a separate download for compatible
+HTML6405 LineageOS 23.2 Vanilla builds. Its release notes list supported
+Recovery identities and the GT-N8010 installation and OTA test coverage.
