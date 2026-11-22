@@ -9,16 +9,15 @@ ROMs are published in each device repository so downloads, checksums, requiremen
 | Model | Release page | LOS 23.2 status |
 | --- | --- | --- |
 | GT-N8000 | [2026-11-22 experimental release](https://github.com/html6405/android_device_samsung_n8000/releases/tag/lineage-23.2-20261122) | Vanilla Enforcing userdebug; tested on one 32 GB device. Platform HEVC disabled; known ueventd/graphics/dock issues remain. |
-| GT-N8010 | [2026-11-22 experimental release](https://github.com/html6405/android_device_samsung_n8010/releases/tag/lineage-23.2-20261122) | Enforcing, Wi-Fi-only, corrected OTA wrapper. See device-specific tests and known issues. |
-| GT-N8013 | [Downloads](https://github.com/html6405/android_device_samsung_n8013/releases) | No LOS 23.2 ROM release yet. |
+| GT-N8010 / GT-N8013 | [2026-11-22 experimental release](https://github.com/html6405/android_device_samsung_n8010/releases/tag/lineage-23.2-20261122) | Enforcing, Wi-Fi-only, corrected OTA wrapper. See device-specific tests and known issues. |
 | GT-N8020 | [Downloads](https://github.com/html6405/android_device_samsung_n8020/releases) | No LOS 23.2 ROM release yet; separate modem/device validation is required. |
 
-Both N8000 and N8010 ROMs require a prepared **2 GiB SYSTEM** partition. Their CACHE layouts differ:
+Both N8000 and the shared N8010/N8013 ROM require a prepared **2 GiB SYSTEM** partition. Their CACHE layouts differ:
 
 | Model | SYSTEM | CACHE |
 | --- | ---: | ---: |
 | N8000 | 2 GiB | 152 MiB |
-| N8010 | 2 GiB | 739241984 bytes (about 705 MiB) |
+| N8010 / N8013 | 2 GiB | 739241984 bytes (about 705 MiB) |
 
 Use the separate [N80xx repartitioning project](https://github.com/html6405/n80xx-repartition/releases)
 and read its [model-specific support and installation instructions](https://github.com/html6405/n80xx-repartition#device-support).
