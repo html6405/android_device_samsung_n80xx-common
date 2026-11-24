@@ -1,5 +1,7 @@
 # Samsung Exynos4 N80xx shared device configuration
 
+November 24 VFP kernel previews are available for [GT-N8000](https://github.com/html6405/android_device_samsung_n8000/releases/tag/lineage-23.2-20261124-vfp-preview) and [GT-N8010 / GT-N8013](https://github.com/html6405/android_device_samsung_n8010/releases/tag/lineage-23.2-20261124-vfp-preview). See the release notes for manual installation and test coverage.
+
 Shared device configuration and compatibility support for the Samsung Galaxy Note 10.1 family.
 
 ## LineageOS 23.2 releases
@@ -54,3 +56,5 @@ is still pending. The experimental userdebug KernelSU profile is not hardened.
 The [optional microG Recovery installer](https://github.com/html6405/exynos4-microg-installer/releases/tag/v0.1.0-rc1) is a separate download for compatible
 HTML6405 LineageOS 23.2 Vanilla builds. Its release notes list supported
 Recovery identities and the GT-N8010 installation and OTA test coverage.
+
+**Recommended for daily use on GT-N8000: [microG with Companion](https://github.com/html6405/exynos4-microg-installer/releases/tag/v0.1.0-rc1).** The tester reported a substantially quicker return to the lock screen after switching to Companion. App launch timings varied with uptime, account state and background load. The [microG with the original Play Store](https://github.com/html6405/exynos4-microg-installer/releases/tag/v0.1.0-phonesky-r7) preview installed and launched a test app under Enforcing on GT-N8000 with the r7 system configuration. Full r7 ZIP, Store self-update and Vanilla OTA validation are pending. The lighter Companion variant is also the recommendation for GT-N8010 / GT-N8013.
